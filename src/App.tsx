@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/AuthModal';
 import { AccountPage } from './components/AccountPage';
@@ -7,69 +7,72 @@ import { TabNavigation } from './components/TabNavigation';
 import { TextToImage } from './components/TextToImage';
 import { ImageToImage } from './components/ImageToImage';
 import { UpgradeModal } from './components/UpgradeModal';
-import { TabType, PricingPlan, User, AuthState } from './types';
+import { TabType, PricingPlan } from './types';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const [authState, setAuthState] = useState<AuthState>('landing');
+  const { user, loading, credits, updateCredits } = useAuth();
+  const [showLanding, setShowLanding] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('text-to-image');
-  const [credits, setCredits] = useState(2); // Start with 2 free credits
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  const handleAuth = (email: string, password: string, name?: string) => {
-    // Simulate authentication
-    const user: User = {
-      id: Math.random().toString(36).substr(2, 9),
-      email,
-      name: name || email.split('@')[0],
-      credits: 2, // Start with 2 credits
-      plan: 'free',
-      createdAt: new Date(),
-    };
-    
-    setCurrentUser(user);
-    setCredits(user.credits);
-    setAuthState('authenticated');
-  };
-
-  const handleLogout = () => {
-    setCurrentUser(null);
-    setCredits(2);
-    setAuthState('landing');
-    setShowAccountPage(false);
-  };
+  useEffect(() => {
+    if (user) {
+      setShowLanding(false);
+      setShowAuthModal(false);
+    }
+  }, [user]);
 
   const handleSelectPlan = (plan: PricingPlan) => {
     // In a real app, this would process payment
-    setCredits(credits + plan.credits);
-    if (currentUser) {
-      setCurrentUser({
-        ...currentUser,
-        credits: credits + plan.credits,
-        plan: plan.id as 'starter' | 'pro',
-      });
-    }
+    updateCredits(plan.credits);
     setShowUpgradeModal(false);
     
     // Show success message (in a real app, you'd show a proper toast/notification)
     alert(`Successfully upgraded to ${plan.name}! ${plan.credits} credits added to your account.`);
   };
 
+  const handleCreditsChange = async (newCredits: number) => {
+    const creditChange = newCredits - credits;
+    await updateCredits(creditChange);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-200 rounded-full animate-spin border-t-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
   // Landing page
-  if (authState === 'landing') {
+  if (showLanding || !user) {
     return (
       <>
-        <LandingPage onGetStarted={() => setAuthState('login')} />
+        <LandingPage onGetStarted={() => {
+          setShowLanding(false);
+          setShowAuthModal(true);
+          setAuthMode('register');
+        }} />
         <AuthModal
-          isOpen={authState === 'login' || authState === 'register'}
+          isOpen={showAuthModal}
           mode={authMode}
-          onClose={() => setAuthState('landing')}
-          onAuth={handleAuth}
+          onClose={() => {
+            setShowAuthModal(false);
+            setShowLanding(true);
+          }}
           onSwitchMode={() => {
             setAuthMode(authMode === 'login' ? 'register' : 'login');
-            setAuthState(authMode === 'login' ? 'register' : 'login');
+          }}
+          onSuccess={() => {
+            setShowAuthModal(false);
+            setShowLanding(false);
           }}
         />
       </>
@@ -77,15 +80,13 @@ function App() {
   }
 
   // Account page
-  if (showAccountPage && currentUser) {
+  if (showAccountPage) {
     return (
       <AccountPage
-        user={currentUser}
         onUpgradeClick={() => {
           setShowAccountPage(false);
           setShowUpgradeModal(true);
         }}
-        onLogout={handleLogout}
         onBackToApp={() => setShowAccountPage(false)}
       />
     );
@@ -97,9 +98,8 @@ function App() {
       <Header 
         credits={credits} 
         onUpgradeClick={() => setShowUpgradeModal(true)}
-        user={currentUser}
+        user={user}
         onAccountClick={() => setShowAccountPage(true)}
-        onLogout={handleLogout}
       />
       
       <TabNavigation 
@@ -111,12 +111,12 @@ function App() {
         {activeTab === 'text-to-image' ? (
           <TextToImage 
             credits={credits} 
-            onCreditsChange={setCredits} 
+            onCreditsChange={handleCreditsChange} 
           />
         ) : (
           <ImageToImage 
             credits={credits} 
-            onCreditsChange={setCredits} 
+            onCreditsChange={handleCreditsChange} 
           />
         )}
       </main>

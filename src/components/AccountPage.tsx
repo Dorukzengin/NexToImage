@@ -1,20 +1,20 @@
 import React from 'react';
-import { User, CreditCard, Settings, LogOut, Zap, Calendar, Crown } from 'lucide-react';
-import { User as UserType } from '../types';
+import { User, Settings, LogOut, Zap, Crown } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 
 interface AccountPageProps {
-  user: UserType;
   onUpgradeClick: () => void;
-  onLogout: () => void;
   onBackToApp: () => void;
 }
 
 export const AccountPage: React.FC<AccountPageProps> = ({
-  user,
   onUpgradeClick,
-  onLogout,
   onBackToApp,
 }) => {
+  const { user, credits, signOut } = useAuth();
+  
+  if (!user) return null;
+
   const getPlanInfo = (plan: string) => {
     switch (plan) {
       case 'starter':
@@ -22,11 +22,11 @@ export const AccountPage: React.FC<AccountPageProps> = ({
       case 'pro':
         return { name: 'Pro', color: 'text-purple-600', bgColor: 'bg-purple-100' };
       default:
-        return { name: 'Ücretsiz', color: 'text-gray-600', bgColor: 'bg-gray-100' };
+        return { name: 'Free', color: 'text-gray-600', bgColor: 'bg-gray-100' };
     }
   };
 
-  const planInfo = getPlanInfo(user.plan);
+  const planInfo = getPlanInfo('free'); // Default to free plan
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -38,15 +38,15 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               onClick={onBackToApp}
               className="text-blue-600 hover:text-blue-700 font-medium"
             >
-              ← Uygulamaya Dön
+              ← Back to App
             </button>
-            <h1 className="text-xl font-semibold text-gray-900">Hesap Ayarları</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Account Settings</h1>
             <button
-              onClick={onLogout}
+              onClick={signOut}
               className="flex items-center space-x-2 text-red-600 hover:text-red-700"
             >
               <LogOut className="w-4 h-4" />
-              <span>Çıkış</span>
+              <span>Sign Out</span>
             </button>
           </div>
         </div>
@@ -65,7 +65,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 <p className="text-gray-600 mb-4">{user.email}</p>
                 
                 <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full ${planInfo.bgColor}`}>
-                  {user.plan === 'pro' && <Crown className="w-4 h-4 text-purple-600" />}
+                  <Crown className="w-4 h-4 text-purple-600" />
                   <span className={`text-sm font-medium ${planInfo.color}`}>
                     {planInfo.name} Plan
                   </span>
@@ -81,51 +81,47 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-semibold text-gray-900 flex items-center space-x-2">
                   <Zap className="w-5 h-5 text-yellow-500" />
-                  <span>Kredi Durumu</span>
+                  <span>Credit Status</span>
                 </h3>
-                {user.plan === 'free' && (
-                  <button
-                    onClick={onUpgradeClick}
-                    className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
-                  >
-                    Yükselt
-                  </button>
-                )}
+                <button
+                  onClick={onUpgradeClick}
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+                >
+                  Upgrade
+                </button>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-gray-900 mb-1">{user.credits}</div>
-                  <div className="text-sm text-gray-600">Kalan Kredi</div>
+                  <div className="text-2xl font-bold text-gray-900 mb-1">{credits}</div>
+                  <div className="text-sm text-gray-600">Remaining Credits</div>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="text-2xl font-bold text-gray-900 mb-1">
-                    {user.plan === 'free' ? '∞' : user.plan === 'starter' ? '50' : '100'}
+                    50
                   </div>
-                  <div className="text-sm text-gray-600">Aylık Limit</div>
+                  <div className="text-sm text-gray-600">Daily Limit</div>
                 </div>
               </div>
 
-              {user.plan === 'free' && (
-                <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <p className="text-sm text-yellow-800">
-                    <strong>Ücretsiz Plan:</strong> Ayda sadece 2 kredi alırsınız. 
-                    Daha fazla kredi için planınızı yükseltin.
-                  </p>
-                </div>
-              )}
+              <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p className="text-sm text-yellow-800">
+                  <strong>Free Plan:</strong> You get 2 credits to start. 
+                  Upgrade your plan for more credits.
+                </p>
+              </div>
             </div>
 
             {/* Account Info */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center space-x-2">
                 <Settings className="w-5 h-5 text-gray-500" />
-                <span>Hesap Bilgileri</span>
+                <span>Account Information</span>
               </h3>
 
               <div className="space-y-4">
                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                  <span className="text-gray-600">E-posta</span>
+                  <span className="text-gray-600">Email</span>
                   <span className="text-gray-900 font-medium">{user.email}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
@@ -133,13 +129,13 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   <span className={`font-medium ${planInfo.color}`}>{planInfo.name}</span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
-                  <span className="text-gray-600">Üyelik Tarihi</span>
+                  <span className="text-gray-600">Member Since</span>
                   <span className="text-gray-900 font-medium">
-                    {user.createdAt.toLocaleDateString('tr-TR')}
+                    {new Date().toLocaleDateString('en-US')}
                   </span>
                 </div>
                 <div className="flex justify-between items-center py-3">
-                  <span className="text-gray-600">Hesap ID</span>
+                  <span className="text-gray-600">Account ID</span>
                   <span className="text-gray-900 font-mono text-sm">{user.id}</span>
                 </div>
               </div>
@@ -148,27 +144,27 @@ export const AccountPage: React.FC<AccountPageProps> = ({
             {/* Usage Guidelines */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6">
-                Kullanım Kuralları
+                Usage Guidelines
               </h3>
 
               <div className="space-y-4">
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Genel Kurallar</h4>
+                  <h4 className="font-medium text-gray-900 mb-2">General Rules</h4>
                   <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                    <li>Her görüntü üretimi 1 kredi harcar</li>
-                    <li>Başarısız üretimler için kredi iadesi yapılır</li>
-                    <li>Günlük maksimum 50 görüntü üretimi sınırı</li>
-                    <li>Ticari kullanım için Pro plan gereklidir</li>
+                    <li>Each image generation costs 1 credit</li>
+                    <li>Failed generations are refunded</li>
+                    <li>Daily maximum of 50 image generations</li>
+                    <li>Pro plan required for commercial use</li>
                   </ul>
                 </div>
 
                 <div>
-                  <h4 className="font-medium text-gray-900 mb-2">Yasak İçerikler</h4>
+                  <h4 className="font-medium text-gray-900 mb-2">Prohibited Content</h4>
                   <ul className="text-sm text-gray-600 space-y-1 list-disc list-inside">
-                    <li>Şiddet, nefret söylemi veya uygunsuz içerik</li>
-                    <li>Telif hakkı olan karakterler veya markalar</li>
-                    <li>Kişisel fotoğrafları izinsiz kullanım</li>
-                    <li>Yanıltıcı veya sahte içerik üretimi</li>
+                    <li>Violence, hate speech, or inappropriate content</li>
+                    <li>Copyrighted characters or brands</li>
+                    <li>Unauthorized use of personal photos</li>
+                    <li>Misleading or fake content generation</li>
                   </ul>
                 </div>
               </div>

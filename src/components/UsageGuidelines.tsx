@@ -18,7 +18,7 @@ export const UsageGuidelines: React.FC<UsageGuidelinesProps> = ({ activeTab }) =
         <Info className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
         <div className="flex-1">
           <h4 className="font-medium text-blue-900 mb-2">
-            {activeTab === 'text-to-image' ? 'Metin Yazma İpuçları' : 'Görüntü Yükleme Kuralları'}
+            {activeTab === 'text-to-image' ? 'Text Writing Tips' : 'Image Upload Guidelines'}
           </h4>
           <ul className="text-sm text-blue-800 space-y-1">
             {guidelines.map((guideline, index) => (

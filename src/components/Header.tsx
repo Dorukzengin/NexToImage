@@ -1,13 +1,13 @@
 import React from 'react';
 import { Zap, User, Settings, LogOut } from 'lucide-react';
-import { User as UserType } from '../types';
+import { AuthUser } from '../lib/supabase';
+import { useAuth } from '../hooks/useAuth';
 
 interface HeaderProps {
   credits: number;
   onUpgradeClick: () => void;
-  user: UserType | null;
+  user: AuthUser | null;
   onAccountClick: () => void;
-  onLogout: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
@@ -15,9 +15,9 @@ export const Header: React.FC<HeaderProps> = ({
   onUpgradeClick, 
   user,
   onAccountClick,
-  onLogout 
 }) => {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
+  const { signOut } = useAuth();
 
   return (
     <header className="bg-white shadow-sm border-b border-gray-200">
@@ -69,17 +69,17 @@ export const Header: React.FC<HeaderProps> = ({
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
                   >
                     <Settings className="w-4 h-4" />
-                    <span>Hesap Ayarları</span>
+                    <span>Account Settings</span>
                   </button>
                   <button
                     onClick={() => {
-                      onLogout();
+                      signOut();
                       setShowUserMenu(false);
                     }}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center space-x-2"
                   >
                     <LogOut className="w-4 h-4" />
-                    <span>Çıkış Yap</span>
+                    <span>Sign Out</span>
                   </button>
                 </div>
               )}
