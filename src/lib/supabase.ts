@@ -21,19 +21,13 @@ export const authService = {
       options: {
         data: {
           name,
+          full_name: name,
         },
-        emailRedirectTo: window.location.origin
+        emailRedirectTo: window.location.origin,
+        // Disable email confirmation for easier testing
+        // In production, you should enable this
       }
     })
-    
-    // If signup successful but no session (email confirmation required)
-    if (data.user && !data.session) {
-      return { 
-        data, 
-        error: null,
-        message: 'Please check your email to confirm your account'
-      }
-    }
     
     return { data, error }
   },

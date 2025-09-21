@@ -35,23 +35,26 @@ export const useAuth = () => {
 
   const loadUserProfile = async (userId: string) => {
     try {
-      // First check if profile exists, if not create it
+      // Wait a bit for the trigger to create the profile
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
       let { data: profile, error } = await supabase
         .from('user_profiles')
         .select('*')
         .eq('id', userId)
         .single()
 
-      // If profile doesn't exist, create it
+      // If profile doesn't exist, create it manually
       if (error && error.code === 'PGRST116') {
         const { data: { user } } = await supabase.auth.getUser()
         if (user) {
+          console.log('Creating user profile manually for:', user.id)
           const { data: newProfile, error: insertError } = await supabase
             .from('user_profiles')
             .insert({
               id: user.id,
               email: user.email || '',
-              name: user.user_metadata?.name || user.email || 'User',
+              name: user.user_metadata?.name || user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
               avatar_url: user.user_metadata?.avatar_url
             })
             .select()
@@ -59,12 +62,21 @@ export const useAuth = () => {
 
           if (insertError) {
             console.error('Error creating user profile:', insertError)
-            return
+            // Try to continue anyway
+            profile = {
+              id: user.id,
+              email: user.email || '',
+              name: user.user_metadata?.name || user.user_metadata?.full_name || 'User',
+              avatar_url: user.user_metadata?.avatar_url,
+              credits: 2
+            }
+          } else {
+            profile = newProfile
           }
-          profile = newProfile
         }
       } else if (error) {
-        throw error
+        console.error('Error loading user profile:', error)
+        return
       }
 
       if (!profile) return

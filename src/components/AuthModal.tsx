@@ -39,33 +39,25 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       let result;
       if (mode === 'register') {
         result = await signUp(email, password, name);
-        
-        // Handle email confirmation case
-        if (result.data?.user && !result.data?.session && !result.error) {
-          setSuccessMessage('Account created! Please check your email to confirm your account.');
-          setEmail('');
-          setPassword('');
-          setName('');
-          setIsLoading(false);
-          return;
-        }
       } else {
         result = await signIn(email, password);
       }
       
       if (result.error) {
-        if (result.error.message.includes('Email not confirmed')) {
-          setError('Please check your email and click the confirmation link before signing in.');
-        } else {
-          setError(result.error.message);
-        }
+        console.error('Auth error:', result.error);
+        setError(result.error.message || 'Authentication failed');
       } else {
-        onSuccess();
-        setEmail('');
-        setPassword('');
-        setName('');
+        setSuccessMessage(mode === 'register' ? 'Account created successfully!' : 'Signed in successfully!');
+        // Small delay to show success message
+        setTimeout(() => {
+          onSuccess();
+          setEmail('');
+          setPassword('');
+          setName('');
+        }, 1000);
       }
     } catch (err) {
+      console.error('Unexpected auth error:', err);
       setError('An unexpected error occurred');
     } finally {
       setIsLoading(false);
