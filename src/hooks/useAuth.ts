@@ -35,13 +35,39 @@ export const useAuth = () => {
 
   const loadUserProfile = async (userId: string) => {
     try {
-      const { data: profile, error } = await supabase
+      // First check if profile exists, if not create it
+      let { data: profile, error } = await supabase
         .from('user_profiles')
         .select('*')
         .eq('id', userId)
         .single()
 
-      if (error) throw error
+      // If profile doesn't exist, create it
+      if (error && error.code === 'PGRST116') {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { data: newProfile, error: insertError } = await supabase
+            .from('user_profiles')
+            .insert({
+              id: user.id,
+              email: user.email || '',
+              name: user.user_metadata?.name || user.email || 'User',
+              avatar_url: user.user_metadata?.avatar_url
+            })
+            .select()
+            .single()
+
+          if (insertError) {
+            console.error('Error creating user profile:', insertError)
+            return
+          }
+          profile = newProfile
+        }
+      } else if (error) {
+        throw error
+      }
+
+      if (!profile) return
 
       setUser({
         id: profile.id,

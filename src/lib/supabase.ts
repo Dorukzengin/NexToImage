@@ -21,9 +21,20 @@ export const authService = {
       options: {
         data: {
           name,
-        }
+        },
+        emailRedirectTo: window.location.origin
       }
     })
+    
+    // If signup successful but no session (email confirmation required)
+    if (data.user && !data.session) {
+      return { 
+        data, 
+        error: null,
+        message: 'Please check your email to confirm your account'
+      }
+    }
+    
     return { data, error }
   },
 

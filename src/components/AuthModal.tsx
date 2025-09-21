@@ -23,6 +23,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   
   const { signUp, signIn, signInWithGoogle } = useAuth();
 
@@ -31,18 +32,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMessage(null);
     setIsLoading(true);
     
     try {
       let result;
       if (mode === 'register') {
         result = await signUp(email, password, name);
+        
+        // Handle email confirmation case
+        if (result.data?.user && !result.data?.session && !result.error) {
+          setSuccessMessage('Account created! Please check your email to confirm your account.');
+          setEmail('');
+          setPassword('');
+          setName('');
+          setIsLoading(false);
+          return;
+        }
       } else {
         result = await signIn(email, password);
       }
       
       if (result.error) {
-        setError(result.error.message);
+        if (result.error.message.includes('Email not confirmed')) {
+          setError('Please check your email and click the confirmation link before signing in.');
+        } else {
+          setError(result.error.message);
+        }
       } else {
         onSuccess();
         setEmail('');
@@ -152,6 +168,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-3">
               <p className="text-red-600 text-sm">{error}</p>
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+              <p className="text-green-600 text-sm">{successMessage}</p>
             </div>
           )}
 
