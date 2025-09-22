@@ -12,7 +12,7 @@ import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { user, loading, credits, updateCredits } = useAuth();
+  const { user, loading, credits, videoCredits, updateCredits, updateVideoCredits } = useAuth();
   const [showLanding, setShowLanding] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -29,11 +29,18 @@ function App() {
 
   const handleSelectPlan = (plan: PricingPlan) => {
     // In a real app, this would process payment
-    updateCredits(plan.credits);
+    if (plan.planType === 'image') {
+      updateCredits(plan.credits);
+    } else if (plan.planType === 'video') {
+      updateVideoCredits(plan.videoCredits || 0);
+    }
     setShowUpgradeModal(false);
     
     // Show success message (in a real app, you'd show a proper toast/notification)
-    alert(`Successfully upgraded to ${plan.name}! ${plan.credits} credits added to your account.`);
+    const creditsMessage = plan.planType === 'video' 
+      ? `${plan.videoCredits} video credits` 
+      : `${plan.credits} image credits`;
+    alert(`Successfully upgraded to ${plan.name}! ${creditsMessage} added to your account.`);
   };
 
   const handleCreditsChange = async (newCredits: number) => {
@@ -41,6 +48,10 @@ function App() {
     await updateCredits(creditChange);
   };
 
+  const handleVideoCreditsChange = async (newVideoCredits: number) => {
+    const creditChange = newVideoCredits - videoCredits;
+    await updateVideoCredits(creditChange);
+  };
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -98,6 +109,7 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Header 
         credits={credits} 
+        videoCredits={videoCredits}
         onUpgradeClick={() => setShowUpgradeModal(true)}
         user={user}
         onAccountClick={() => setShowAccountPage(true)}
@@ -121,8 +133,8 @@ function App() {
           />
         ) : (
           <ImageToVideo 
-            credits={credits} 
-            onCreditsChange={handleCreditsChange} 
+           videoCredits={videoCredits} 
+           onVideoCreditsChange={handleVideoCreditsChange} 
           />
         )}
       </main>

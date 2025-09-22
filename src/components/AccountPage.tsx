@@ -11,7 +11,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
   onUpgradeClick,
   onBackToApp,
 }) => {
-  const { user, credits, signOut } = useAuth();
+  const { user, credits, videoCredits, signOut } = useAuth();
   
   if (!user) return null;
 
@@ -92,22 +92,20 @@ export const AccountPage: React.FC<AccountPageProps> = ({
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-gray-900 mb-1">{credits}</div>
-                  <div className="text-sm text-gray-600">Remaining Credits</div>
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-blue-900 mb-1">{credits}</div>
+                  <div className="text-sm text-blue-600">Image Credits</div>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-gray-900 mb-1">
-                    50
-                  </div>
-                  <div className="text-sm text-gray-600">Daily Limit</div>
+                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-green-900 mb-1">{videoCredits}</div>
+                  <div className="text-sm text-green-600">Video Credits</div>
                 </div>
               </div>
 
               <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
                 <p className="text-sm text-yellow-800">
-                  <strong>Free Plan:</strong> You get 2 credits to start. 
-                  Upgrade your plan for more credits.
+                  <strong>Free Plan:</strong> You get 2 image credits to start. 
+                  Purchase video credits separately for video generation.
                 </p>
               </div>
             </div>

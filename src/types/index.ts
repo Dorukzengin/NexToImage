@@ -27,7 +27,9 @@ export interface PricingPlan {
   name: string;
   price: number;
   credits: number;
+  videoCredits?: number;
   features: string[];
+  planType: 'image' | 'video' | 'combo';
 }
 
 export type TabType = 'text-to-image' | 'image-to-image';

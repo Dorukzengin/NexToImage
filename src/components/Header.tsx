@@ -5,6 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 
 interface HeaderProps {
   credits: number;
+  videoCredits: number;
   onUpgradeClick: () => void;
   user: AuthUser | null;
   onAccountClick: () => void;
@@ -12,6 +13,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ 
   credits, 
+  videoCredits,
   onUpgradeClick, 
   user,
   onAccountClick,
@@ -33,11 +35,19 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2 bg-gray-50 rounded-full px-4 py-2">
-              <Zap className="w-4 h-4 text-yellow-500" />
-              <span className="text-sm font-medium text-gray-700">
-                {credits} credits
-              </span>
+            <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-2 bg-blue-50 rounded-full px-3 py-1">
+                <Zap className="w-4 h-4 text-blue-500" />
+                <span className="text-sm font-medium text-blue-700">
+                  {credits}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2 bg-green-50 rounded-full px-3 py-1">
+                <Zap className="w-4 h-4 text-green-500" />
+                <span className="text-sm font-medium text-green-700">
+                  {videoCredits} video
+                </span>
+              </div>
             </div>
             
             <button

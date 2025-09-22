@@ -6,6 +6,7 @@ export const useAuth = () => {
   const [user, setUser] = useState<AuthUser | null>(null)
   const [loading, setLoading] = useState(true)
   const [credits, setCredits] = useState(0)
+  const [videoCredits, setVideoCredits] = useState(0)
 
   useEffect(() => {
     // Get initial session
@@ -88,6 +89,7 @@ export const useAuth = () => {
         avatar_url: profile.avatar_url,
       })
       setCredits(profile.credits)
+      setVideoCredits(profile.video_credits || 0)
     } catch (error) {
       console.error('Error loading user profile:', error)
     }
@@ -119,6 +121,7 @@ export const useAuth = () => {
     const { error } = await authService.signOut()
     setUser(null)
     setCredits(0)
+    setVideoCredits(0)
     setLoading(false)
     return { error }
   }
@@ -142,14 +145,35 @@ export const useAuth = () => {
     }
   }
 
+  const updateVideoCredits = async (creditChange: number) => {
+    if (!user) return
+
+    try {
+      const { data, error } = await supabase.rpc('update_user_video_credits', {
+        user_id: user.id,
+        credit_change: creditChange
+      })
+
+      if (error) throw error
+
+      setVideoCredits(data)
+      return data
+    } catch (error) {
+      console.error('Error updating video credits:', error)
+      throw error
+    }
+  }
+
   return {
     user,
     loading,
     credits,
+    videoCredits,
     signUp,
     signIn,
     signInWithGoogle,
     signOut,
-    updateCredits
+    updateCredits,
+    updateVideoCredits
   }
 }

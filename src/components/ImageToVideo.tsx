@@ -6,11 +6,11 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { fileToDataUrl, sleep } from '../utils';
 
 interface ImageToVideoProps {
-  credits: number;
-  onCreditsChange: (credits: number) => void;
+  videoCredits: number;
+  onVideoCreditsChange: (credits: number) => void;
 }
 
-export const ImageToVideo: React.FC<ImageToVideoProps> = ({ credits, onCreditsChange }) => {
+export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, onVideoCreditsChange }) => {
   const [prompt, setPrompt] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -81,7 +81,7 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ credits, onCreditsCh
       return;
     }
 
-    if (credits <= 0) {
+    if (videoCredits <= 0) {
       setError('Insufficient credits. Please upgrade to continue.');
       return;
     }
@@ -99,7 +99,7 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ credits, onCreditsCh
       const videoUrl = await pollForVideoResult(response.request_id);
       
       setGeneratedVideo(videoUrl);
-      onCreditsChange(credits - 2); // Video generation costs 2 credits
+      onVideoCreditsChange(videoCredits - 1); // Video generation costs 1 video credit
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Video generation failed');
     } finally {
@@ -200,16 +200,16 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ credits, onCreditsCh
 
           <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
             <p className="text-yellow-800 text-sm">
-              <strong>Note:</strong> Video generation costs 2 credits and takes 2-5 minutes to complete.
+              <strong>Note:</strong> Video generation costs 1 video credit and takes 2-5 minutes to complete.
             </p>
           </div>
 
           <button
             onClick={handleGenerate}
-            disabled={isGenerating || !uploadedImage || credits < 2}
+            disabled={isGenerating || !uploadedImage || videoCredits <= 0}
             className="w-full bg-gradient-to-r from-green-500 to-teal-600 text-white py-3 px-6 rounded-lg font-medium hover:from-green-600 hover:to-teal-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] disabled:hover:scale-100"
           >
-            {isGenerating ? 'Generating Video...' : `Generate Video (2 credits)`}
+            {isGenerating ? 'Generating Video...' : `Generate Video (1 video credit)`}
           </button>
         </div>
       </div>
