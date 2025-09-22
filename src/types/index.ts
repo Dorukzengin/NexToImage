@@ -31,6 +31,7 @@ export interface PricingPlan {
 }
 
 export type TabType = 'text-to-image' | 'image-to-image';
+export type TabType = 'text-to-image' | 'image-to-image' | 'image-to-video';
 
 export type ResolutionOption = {
   label: string;

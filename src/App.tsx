@@ -6,6 +6,7 @@ import { Header } from './components/Header';
 import { TabNavigation } from './components/TabNavigation';
 import { TextToImage } from './components/TextToImage';
 import { ImageToImage } from './components/ImageToImage';
+import { ImageToVideo } from './components/ImageToVideo';
 import { UpgradeModal } from './components/UpgradeModal';
 import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
@@ -113,8 +114,13 @@ function App() {
             credits={credits} 
             onCreditsChange={handleCreditsChange} 
           />
-        ) : (
+        ) : activeTab === 'image-to-image' ? (
           <ImageToImage 
+            credits={credits} 
+            onCreditsChange={handleCreditsChange} 
+          />
+        ) : (
+          <ImageToVideo 
             credits={credits} 
             onCreditsChange={handleCreditsChange} 
           />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Type, Image } from 'lucide-react';
+import { Type, Image, Video } from 'lucide-react';
 import { TabType } from '../types';
 
 interface TabNavigationProps {
@@ -18,6 +18,11 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabCh
       id: 'image-to-image' as TabType,
       label: 'Image to Image',
       icon: Image,
+    },
+    {
+      id: 'image-to-video' as TabType,
+      label: 'Image to Video',
+      icon: Video,
     },
   ];
 

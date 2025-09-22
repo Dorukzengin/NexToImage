@@ -15,6 +15,14 @@ export const usageGuidelines = {
     "Don't use copyrighted images",
     "Don't transform personal photos without permission"
   ],
+  imageToVideo: [
+    "Upload high-quality, clear images (min. 512x512 pixels)",
+    "Supported formats: JPG, PNG, WEBP (max. 10MB)",
+    "Motion prompts help guide the animation style",
+    "Leave motion prompt empty for automatic motion detection",
+    "Video generation takes 2-5 minutes to complete",
+    "Don't use copyrighted images or personal photos without permission"
+  ],
   general: [
     "Each image generation costs 1 credit",
     "Generation time varies from 30 seconds to 2 minutes",

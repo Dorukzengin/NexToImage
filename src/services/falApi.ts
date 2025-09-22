@@ -5,7 +5,9 @@ const FAL_KEY = '00bdb59e-2b83-4a4e-bc56-75de8c2d16c0:95c17d1893b2ce5c5a20598168
 export class FalApiService {
   private static readonly TEXT_TO_IMAGE_URL = 'https://queue.fal.run/fal-ai/flux-pro/kontext/max/text-to-image';
   private static readonly IMAGE_TO_IMAGE_URL = 'https://queue.fal.run/fal-ai/flux-pro/kontext/max';
+  private static readonly IMAGE_TO_VIDEO_URL = 'https://queue.fal.run/fal-ai/kling-video/v2.1/master/image-to-video';
   private static readonly BASE_REQUEST_URL = 'https://queue.fal.run/fal-ai/flux-pro/requests';
+  private static readonly VIDEO_REQUEST_URL = 'https://queue.fal.run/fal-ai/kling-video/requests';
 
   private static getHeaders(): Record<string, string> {
     return {
@@ -61,6 +63,28 @@ export class FalApiService {
     }
   }
 
+  static async generateImageToVideo(request: GenerationRequest): Promise<GenerationResponse> {
+    try {
+      const response = await fetch(this.IMAGE_TO_VIDEO_URL, {
+        method: 'POST',
+        headers: this.getHeaders(),
+        body: JSON.stringify({
+          prompt: request.prompt,
+          image_url: request.image_url,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Image-to-video generation failed:', error);
+      throw new Error('Failed to generate video. Please try again.');
+    }
+  }
+
   static async checkStatus(requestId: string): Promise<StatusResponse> {
     try {
       const response = await fetch(`${this.BASE_REQUEST_URL}/${requestId}/status`, {
@@ -79,6 +103,24 @@ export class FalApiService {
     }
   }
 
+  static async checkVideoStatus(requestId: string): Promise<StatusResponse> {
+    try {
+      const response = await fetch(`${this.VIDEO_REQUEST_URL}/${requestId}/status`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Status check failed: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Video status check failed:', error);
+      throw new Error('Failed to check video generation status.');
+    }
+  }
+
   static async getResult(requestId: string): Promise<ResultResponse> {
     try {
       const response = await fetch(`${this.BASE_REQUEST_URL}/${requestId}`, {
@@ -94,6 +136,24 @@ export class FalApiService {
     } catch (error) {
       console.error('Result fetch failed:', error);
       throw new Error('Failed to get generation result.');
+    }
+  }
+
+  static async getVideoResult(requestId: string): Promise<any> {
+    try {
+      const response = await fetch(`${this.VIDEO_REQUEST_URL}/${requestId}`, {
+        method: 'GET',
+        headers: this.getHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Result fetch failed: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Video result fetch failed:', error);
+      throw new Error('Failed to get video generation result.');
     }
   }
 }
