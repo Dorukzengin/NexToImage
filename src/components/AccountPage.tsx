@@ -100,6 +100,10 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   <div className="text-2xl font-bold text-green-900 mb-1">{videoCredits}</div>
                   <div className="text-sm text-green-600">Video Credits</div>
                 </div>
+                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
+                  <div className="text-2xl font-bold text-green-900 mb-1">{videoCredits}</div>
+                  <div className="text-sm text-green-600">Video Credits</div>
+                </div>
               </div>
 
               <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
