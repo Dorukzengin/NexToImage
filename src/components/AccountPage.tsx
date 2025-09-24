@@ -1,5 +1,5 @@
 import React from 'react';
-import { User, Settings, LogOut, Zap, Crown } from 'lucide-react';
+import { User, Settings, LogOut, Zap, Crown, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface AccountPageProps {
@@ -18,6 +18,8 @@ export const AccountPage: React.FC<AccountPageProps> = ({
   onBackToApp,
 }) => {
   const { user, credits, videoCredits, signOut } = useAuth();
+  const [showCancelModal, setShowCancelModal] = React.useState(false);
+  const [cancelType, setCancelType] = React.useState<'image' | 'video' | null>(null);
   
   if (!user) return null;
 
@@ -45,6 +47,24 @@ export const AccountPage: React.FC<AccountPageProps> = ({
 
   const imagePlanInfo = getImagePlanInfo(imagePlan);
   const videoPlanInfo = getVideoPlanInfo(videoPlan);
+
+  const handleCancelPlan = (planType: 'image' | 'video') => {
+    setCancelType(planType);
+    setShowCancelModal(true);
+  };
+
+  const confirmCancelPlan = async () => {
+    if (!cancelType) return;
+    
+    try {
+      await onPlanChange(cancelType, 'free');
+      setShowCancelModal(false);
+      setCancelType(null);
+    } catch (error) {
+      console.error('Error canceling plan:', error);
+      alert('Failed to cancel plan. Please try again.');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -148,24 +168,44 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                   <span className="text-gray-600">Image Plan</span>
                   <div className="flex items-center space-x-3">
                     <span className={`font-medium ${imagePlanInfo.color}`}>{imagePlanInfo.name}</span>
-                    <button
-                      onClick={onUpgradeClick}
-                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                    >
-                      {imagePlan === 'free' ? 'Upgrade' : 'Change'}
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={onUpgradeClick}
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      >
+                        {imagePlan === 'free' ? 'Upgrade' : 'Change'}
+                      </button>
+                      {imagePlan !== 'free' && (
+                        <button
+                          onClick={() => handleCancelPlan('image')}
+                          className="text-red-600 hover:text-red-700 text-sm font-medium"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
                   <span className="text-gray-600">Video Plan</span>
                   <div className="flex items-center space-x-3">
                     <span className={`font-medium ${videoPlanInfo.color}`}>{videoPlanInfo.name}</span>
-                    <button
-                      onClick={onUpgradeClick}
-                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
-                    >
-                      {videoPlan === 'free' ? 'Choose' : 'Change'}
-                    </button>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={onUpgradeClick}
+                        className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      >
+                        {videoPlan === 'free' ? 'Choose' : 'Change'}
+                      </button>
+                      {videoPlan !== 'free' && (
+                        <button
+                          onClick={() => handleCancelPlan('video')}
+                          className="text-red-600 hover:text-red-700 text-sm font-medium"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -232,6 +272,51 @@ export const AccountPage: React.FC<AccountPageProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Cancel Subscription Modal */}
+      {showCancelModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl max-w-md w-full p-6">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-xl font-semibold text-gray-900">Cancel Subscription</h3>
+              <button
+                onClick={() => setShowCancelModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+            
+            <div className="mb-6">
+              <p className="text-gray-600 mb-4">
+                Are you sure you want to cancel your {cancelType === 'image' ? 'Image' : 'Video'} plan?
+              </p>
+              
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 text-sm">
+                  <strong>Important:</strong> You will be able to use your remaining credits until the end of this billing period. 
+                  No refund will be provided, but you can continue using the service until your current subscription expires.
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex space-x-3">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+              >
+                Keep Subscription
+              </button>
+              <button
+                onClick={confirmCancelPlan}
+                className="flex-1 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+              >
+                Cancel Subscription
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
