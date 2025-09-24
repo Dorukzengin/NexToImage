@@ -28,7 +28,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center space-x-3">
             <div className="w-8 h-8 flex items-center justify-center">
               <img 
-                src="/logo-transparent.png" 
+                src="/logo.png" 
                 alt="NexToImage Logo" 
                 className="w-full h-full object-contain"
               />
