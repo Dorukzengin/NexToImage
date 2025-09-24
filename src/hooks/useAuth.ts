@@ -40,7 +40,29 @@ export const useAuth = () => {
     try {
       // Check if Supabase is properly configured
       if (!supabase) {
-        throw new Error('Supabase client is not initialized')
+        console.warn('Supabase is not configured, using fallback profile')
+        const fallbackProfile = {
+          id: userId,
+          email: 'user@example.com',
+          name: 'User',
+          avatar_url: null,
+          credits: 2,
+          video_credits: 0,
+          image_plan: 'free',
+          video_plan: 'free'
+        }
+        
+        setUser({
+          id: fallbackProfile.id,
+          email: fallbackProfile.email,
+          name: fallbackProfile.name,
+          avatar_url: fallbackProfile.avatar_url,
+        })
+        setCredits(fallbackProfile.credits)
+        setVideoCredits(fallbackProfile.video_credits)
+        setImagePlan(fallbackProfile.image_plan)
+        setVideoPlan(fallbackProfile.video_plan)
+        return
       }
 
       // Wait a bit for the trigger to create the profile

@@ -1,16 +1,19 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL?.trim()
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY?.trim()
 
 if (!supabaseUrl || !supabaseAnonKey) {
   console.error('Missing Supabase environment variables:')
   console.error('VITE_SUPABASE_URL:', supabaseUrl ? '✓ Set' : '✗ Missing')
   console.error('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? '✓ Set' : '✗ Missing')
-  throw new Error('Supabase environment variables are not configured. Please check your .env file.')
+  console.error('Please check your .env file and ensure these variables are set correctly.')
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+// Create a mock client if environment variables are missing
+export const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey)
+  : null
 
 export type AuthUser = {
   id: string
@@ -22,6 +25,10 @@ export type AuthUser = {
 
 export const authService = {
   async signUp(email: string, password: string, name: string) {
+    if (!supabase) {
+      return { data: null, error: { message: 'Supabase is not configured. Please check your environment variables.' } }
+    }
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -38,6 +45,10 @@ export const authService = {
   },
 
   async signIn(email: string, password: string) {
+    if (!supabase) {
+      return { data: null, error: { message: 'Supabase is not configured. Please check your environment variables.' } }
+    }
+    
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -46,6 +57,10 @@ export const authService = {
   },
 
   async signInWithGoogle() {
+    if (!supabase) {
+      return { data: null, error: { message: 'Supabase is not configured. Please check your environment variables.' } }
+    }
+    
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -56,16 +71,29 @@ export const authService = {
   },
 
   async signOut() {
+    if (!supabase) {
+      return { error: { message: 'Supabase is not configured. Please check your environment variables.' } }
+    }
+    
     const { error } = await supabase.auth.signOut()
     return { error }
   },
 
   async getCurrentUser() {
+    if (!supabase) {
+      return null
+    }
+    
     const { data: { user } } = await supabase.auth.getUser()
     return user
   },
 
   onAuthStateChange(callback: (user: any) => void) {
+    if (!supabase) {
+      // Return a mock subscription that does nothing
+      return { data: { subscription: { unsubscribe: () => {} } } }
+    }
+    
     return supabase.auth.onAuthStateChange((event, session) => {
       callback(session?.user || null)
     })
