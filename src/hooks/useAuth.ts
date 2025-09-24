@@ -158,44 +158,6 @@ export const useAuth = () => {
     return { error }
   }
 
-  const updateCredits = async (creditChange: number) => {
-    if (!user) return
-
-    try {
-      const { data, error } = await supabase.rpc('update_user_credits', {
-        user_id: user.id,
-        credit_change: creditChange
-      })
-
-      if (error) throw error
-
-      setCredits(data)
-      return data
-    } catch (error) {
-      console.error('Error updating credits:', error)
-      throw error
-    }
-  }
-
-  const updateVideoCredits = async (creditChange: number) => {
-    if (!user) return
-
-    try {
-      const { data, error } = await supabase.rpc('update_user_video_credits', {
-        user_id: user.id,
-        credit_change: creditChange
-      })
-
-      if (error) throw error
-
-      setVideoCredits(data)
-      return data
-    } catch (error) {
-      console.error('Error updating video credits:', error)
-      throw error
-    }
-  }
-
   const updatePlan = async (planType: 'image' | 'video', planId: string) => {
     if (!user) return
 
