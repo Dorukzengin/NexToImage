@@ -21,12 +21,14 @@ export const AccountPage: React.FC<AccountPageProps> = ({
         return { name: 'Starter', color: 'text-blue-600', bgColor: 'bg-blue-100' };
       case 'pro':
         return { name: 'Pro', color: 'text-purple-600', bgColor: 'bg-purple-100' };
+      case 'premium':
+        return { name: 'Premium', color: 'text-purple-600', bgColor: 'bg-purple-100' };
       default:
         return { name: 'Free', color: 'text-gray-600', bgColor: 'bg-gray-100' };
     }
   };
 
-  const planInfo = getPlanInfo('free'); // Default to free plan
+  const planInfo = getPlanInfo('free'); // This will be updated when we have real plan data
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -95,10 +97,6 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
                   <div className="text-2xl font-bold text-blue-900 mb-1">{credits}</div>
                   <div className="text-sm text-blue-600">Image Credits</div>
-                </div>
-                <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-green-900 mb-1">{videoCredits}</div>
-                  <div className="text-sm text-green-600">Video Credits</div>
                 </div>
                 <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
                   <div className="text-2xl font-bold text-green-900 mb-1">{videoCredits}</div>

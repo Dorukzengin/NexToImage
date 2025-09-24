@@ -44,13 +44,11 @@ function App() {
   };
 
   const handleCreditsChange = async (newCredits: number) => {
-    const creditChange = newCredits - credits;
-    await updateCredits(creditChange);
+    await updateCredits(newCredits);
   };
 
   const handleVideoCreditsChange = async (newVideoCredits: number) => {
-    const creditChange = newVideoCredits - videoCredits;
-    await updateVideoCredits(creditChange);
+    await updateVideoCredits(newVideoCredits);
   };
 
   if (loading) {
