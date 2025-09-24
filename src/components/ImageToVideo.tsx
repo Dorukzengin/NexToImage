@@ -101,7 +101,23 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, onVide
       setGeneratedVideo(videoUrl);
       // Update video credits in database
       const newVideoCredits = videoCredits - 1;
-      onVideoCreditsChange(newVideoCredits);
+      
+      // Update video credits through database
+      try {
+        const { supabase } = await import('../lib/supabase');
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase
+            .from('user_profiles')
+            .update({ video_credits: newVideoCredits })
+            .eq('id', user.id);
+        }
+        onVideoCreditsChange(newVideoCredits);
+      } catch (error) {
+        console.error('Error updating video credits:', error);
+        // Still update local state
+        onVideoCreditsChange(newVideoCredits);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Video generation failed');
     } finally {

@@ -85,7 +85,28 @@ export const TextToImage: React.FC<TextToImageProps> = ({ credits, onCreditsChan
       setGeneratedImage(imageUrl);
       // Update credits in database
       const newCredits = credits - 1;
-      onCreditsChange(newCredits);
+      
+      // Update credits through auth hook
+      try {
+        const { updateCredits } = await import('../hooks/useAuth');
+        // We need to access the updateCredits function from the auth context
+        // For now, we'll trigger a re-fetch by calling onCreditsChange
+        onCreditsChange(newCredits);
+        
+        // Also update in database directly
+        const { supabase } = await import('../lib/supabase');
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase
+            .from('user_profiles')
+            .update({ credits: newCredits })
+            .eq('id', user.id);
+        }
+      } catch (error) {
+        console.error('Error updating credits:', error);
+        // Still update local state
+        onCreditsChange(newCredits);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Generation failed');
     } finally {

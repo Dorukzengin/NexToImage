@@ -61,7 +61,7 @@ const pricingPlans: PricingPlan[] = [
   },
   {
     id: 'video-starter',
-    name: 'Video Starter',
+    name: 'Video Master Pack',
     price: 40,
     credits: 0,
     videoCredits: 5,

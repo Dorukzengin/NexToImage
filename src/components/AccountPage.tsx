@@ -37,7 +37,7 @@ export const AccountPage: React.FC<AccountPageProps> = ({
   const getVideoPlanInfo = (plan: string) => {
     switch (plan) {
       case 'video-starter':
-        return { name: 'Video Starter', color: 'text-green-600', bgColor: 'bg-green-100' };
+        return { name: 'Video Master Pack', color: 'text-green-600', bgColor: 'bg-green-100' };
       default:
         return { name: 'Free', color: 'text-gray-600', bgColor: 'bg-gray-100' };
     }

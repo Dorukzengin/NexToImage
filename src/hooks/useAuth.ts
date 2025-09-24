@@ -284,7 +284,9 @@ export const useAuth = () => {
       return newCredits;
     } catch (error) {
       console.error('Error updating credits:', error);
-      throw error;
+      // If database update fails, still update local state for offline functionality
+      setCredits(newCredits);
+      return newCredits;
     }
   }
 
@@ -305,7 +307,9 @@ export const useAuth = () => {
       return newVideoCredits;
     } catch (error) {
       console.error('Error updating video credits:', error);
-      throw error;
+      // If database update fails, still update local state for offline functionality
+      setVideoCredits(newVideoCredits);
+      return newVideoCredits;
     }
   }
 

@@ -127,25 +127,25 @@ function App() {
         {activeTab === 'text-to-image' ? (
           <TextToImage 
             credits={credits} 
-            onCreditsChange={(newCredits) => {
-              // Credits will be updated automatically through the auth hook
-              console.log('Credits changed to:', newCredits);
+            onCreditsChange={async (newCredits) => {
+              // Force refresh user profile to get updated credits
+              window.location.reload();
             }} 
           />
         ) : activeTab === 'image-to-image' ? (
           <ImageToImage 
             credits={credits} 
-            onCreditsChange={(newCredits) => {
-              // Credits will be updated automatically through the auth hook
-              console.log('Credits changed to:', newCredits);
+            onCreditsChange={async (newCredits) => {
+              // Force refresh user profile to get updated credits
+              window.location.reload();
             }} 
           />
         ) : (
           <ImageToVideo 
            videoCredits={videoCredits} 
-           onVideoCreditsChange={(newVideoCredits) => {
-             // Video credits will be updated automatically through the auth hook
-             console.log('Video credits changed to:', newVideoCredits);
+           onVideoCreditsChange={async (newVideoCredits) => {
+             // Force refresh user profile to get updated credits
+             window.location.reload();
            }} 
           />
         )}
