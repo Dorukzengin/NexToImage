@@ -63,13 +63,39 @@ export const useAuth = () => {
 
           if (insertError) {
             console.error('Error creating user profile:', insertError)
-            // Try to continue anyway
-            profile = {
-              id: user.id,
-              email: user.email || '',
-              name: user.user_metadata?.name || user.user_metadata?.full_name || 'User',
-              avatar_url: user.user_metadata?.avatar_url,
-              credits: 2
+            
+            // If duplicate key error, retry fetching the existing profile
+            if (insertError.code === '23505') {
+              console.log('Profile already exists, retrying fetch...')
+              const { data: existingProfile, error: retryError } = await supabase
+                .from('user_profiles')
+                .select('*')
+                .eq('id', userId)
+                .single()
+              
+              if (!retryError && existingProfile) {
+                profile = existingProfile
+              } else {
+                // Fallback profile if retry also fails
+                profile = {
+                  id: user.id,
+                  email: user.email || '',
+                  name: user.user_metadata?.name || user.user_metadata?.full_name || 'User',
+                  avatar_url: user.user_metadata?.avatar_url,
+                  credits: 2,
+                  video_credits: 0
+                }
+              }
+            } else {
+              // Other insert errors - use fallback profile
+              profile = {
+                id: user.id,
+                email: user.email || '',
+                name: user.user_metadata?.name || user.user_metadata?.full_name || 'User',
+                avatar_url: user.user_metadata?.avatar_url,
+                credits: 2,
+                video_credits: 0
+              }
             }
           } else {
             profile = newProfile
