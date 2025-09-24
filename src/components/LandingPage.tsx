@@ -207,25 +207,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
             </div>
 
             <div className="relative">
-              <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl p-8 shadow-2xl">
-                <div className="bg-white rounded-xl p-6 shadow-lg">
-                  <div className="flex items-center space-x-3 mb-4">
+              <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl p-4 shadow-2xl">
+                <div className="bg-white rounded-xl p-4 shadow-lg">
+                  <div className="flex items-center space-x-3 mb-3">
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-green-400 rounded-full"></div>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                    <p className="text-sm text-gray-600 mb-2">Prompt:</p>
-                    <p className="text-gray-800 font-medium">"A serene mountain lake at sunset with purple sky"</p>
+                  <div className="bg-gray-50 rounded-lg p-3 mb-3">
+                    <p className="text-xs text-gray-600 mb-1">Prompt:</p>
+                    <p className="text-sm text-gray-800 font-medium">"A serene mountain lake at sunset with purple sky"</p>
                   </div>
-                  <div className="bg-gradient-to-br from-purple-200 to-blue-200 rounded-lg aspect-video flex items-center justify-center">
-                    <div className="text-center text-gray-600">
-                      <Camera className="w-16 h-16 mx-auto mb-4 opacity-60" />
-                      <p className="font-medium">AI-Generated Image</p>
-                      <p className="text-sm opacity-75">Sample Output</p>
-                    </div>
+                  <div className="rounded-lg overflow-hidden">
+                    <img 
+                      src="/NexToImage AI Image Generation (1).png" 
+                      alt="AI-Generated mountain lake at sunset with purple sky"
+                      className="w-full h-auto rounded-lg shadow-sm"
+                    />
                   </div>
-                  <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
+                  <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
                     <div className="flex items-center space-x-2">
                       <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                       <span>Generated in 3 seconds</span>
