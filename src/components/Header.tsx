@@ -26,13 +26,11 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 flex items-center justify-center">
-              <img 
-                src="/logo.png" 
-                alt="NexToImage Logo" 
-                className="w-full h-full object-contain"
-              />
-            </div>
+            <img 
+              src="/logo.png" 
+              alt="NexToImage Logo" 
+              className="h-10 w-auto"
+            />
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               NexToImage
             </h1>
