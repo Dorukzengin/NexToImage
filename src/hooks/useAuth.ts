@@ -38,6 +38,11 @@ export const useAuth = () => {
 
   const loadUserProfile = async (userId: string) => {
     try {
+      // Check if Supabase is properly configured
+      if (!supabase) {
+        throw new Error('Supabase client is not initialized')
+      }
+
       // Wait a bit for the trigger to create the profile
       await new Promise(resolve => setTimeout(resolve, 1000))
       
@@ -105,7 +110,28 @@ export const useAuth = () => {
         }
       } else if (error) {
         console.error('Error loading user profile:', error)
-        return
+        
+        // If it's a network error, create a fallback profile
+        if (error.message?.includes('Failed to fetch') || error.message?.includes('fetch')) {
+          console.log('Network error detected, using fallback profile')
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            profile = {
+              id: user.id,
+              email: user.email || '',
+              name: user.user_metadata?.name || user.user_metadata?.full_name || 'User',
+              avatar_url: user.user_metadata?.avatar_url,
+              credits: 2,
+              video_credits: 0,
+              image_plan: 'free',
+              video_plan: 'free'
+            }
+          } else {
+            return
+          }
+        } else {
+          return
+        }
       }
 
       if (!profile) return
@@ -116,12 +142,34 @@ export const useAuth = () => {
         name: profile.name,
         avatar_url: profile.avatar_url,
       })
-      setCredits(profile.credits)
+      setCredits(profile.credits || 2)
       setVideoCredits(profile.video_credits || 0)
       setImagePlan(profile.image_plan || 'free')
       setVideoPlan(profile.video_plan || 'free')
     } catch (error) {
       console.error('Error loading user profile:', error)
+      
+      // If it's a network/fetch error, try to get basic user info and create fallback
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        console.log('Network connection failed, using offline fallback')
+        try {
+          const { data: { user } } = await supabase.auth.getUser()
+          if (user) {
+            setUser({
+              id: user.id,
+              email: user.email || '',
+              name: user.user_metadata?.name || user.user_metadata?.full_name || 'User',
+              avatar_url: user.user_metadata?.avatar_url,
+            })
+            setCredits(2) // Default credits
+            setVideoCredits(0)
+            setImagePlan('free')
+            setVideoPlan('free')
+          }
+        } catch (fallbackError) {
+          console.error('Fallback profile creation also failed:', fallbackError)
+        }
+      }
     }
   }
 
