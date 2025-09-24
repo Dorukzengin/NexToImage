@@ -200,6 +200,109 @@ export const useAuth = () => {
     if (!user) return
 
     try {
+      const updateData: any = {};
+      
+      if (planType === 'image') {
+        updateData.image_plan = planId;
+      } else {
+        updateData.video_plan = planId;
+      }
+
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update(updateData)
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      // Update local state
+      if (planType === 'image') {
+        setImagePlan(planId);
+      } else {
+        setVideoPlan(planId);
+      }
+
+      // Also add credits based on the plan
+      const planCredits = getPlanCredits(planType, planId);
+      if (planCredits > 0) {
+        if (planType === 'image') {
+          await updateCredits(credits + planCredits);
+        } else {
+          await updateVideoCredits(videoCredits + planCredits);
+        }
+      }
+
+      return data;
+    } catch (error) {
+      console.error('Error updating plan:', error);
+      throw error;
+    }
+  }
+
+  const getPlanCredits = (planType: 'image' | 'video', planId: string): number => {
+    if (planType === 'image') {
+      switch (planId) {
+        case 'starter': return 50;
+        case 'pro': return 100;
+        case 'premium': return 150;
+        default: return 0;
+      }
+    } else {
+      switch (planId) {
+        case 'video-starter': return 5;
+        default: return 0;
+      }
+    }
+  }
+
+  const updateCredits = async (newCredits: number) => {
+    if (!user) return
+
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({ credits: newCredits })
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setCredits(newCredits);
+      return newCredits;
+    } catch (error) {
+      console.error('Error updating credits:', error);
+      throw error;
+    }
+  }
+
+  const updateVideoCredits = async (newVideoCredits: number) => {
+    if (!user) return
+
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .update({ video_credits: newVideoCredits })
+        .eq('id', user.id)
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      setVideoCredits(newVideoCredits);
+      return newVideoCredits;
+    } catch (error) {
+      console.error('Error updating video credits:', error);
+      throw error;
+    }
+  }
+
+  const oldUpdatePlan = async (planType: 'image' | 'video', planId: string) => {
+    if (!user) return
+
+    try {
       const { data, error } = await supabase.rpc('update_user_plan', {
         user_id: user.id,
         plan_type: planType,
@@ -232,8 +335,6 @@ export const useAuth = () => {
     signIn,
     signInWithGoogle,
     signOut,
-    updateCredits,
-    updateVideoCredits,
     updatePlan
   }
 }

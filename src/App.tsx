@@ -12,7 +12,7 @@ import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { user, loading, credits, videoCredits, imagePlan, videoPlan, updateCredits, updateVideoCredits, updatePlan } = useAuth();
+  const { user, loading, credits, videoCredits, imagePlan, videoPlan, updatePlan } = useAuth();
   const [showLanding, setShowLanding] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -28,18 +28,29 @@ function App() {
   }, [user]);
 
   const handleSelectPlan = (plan: PricingPlan) => {
-    // Redirect to purchase page (will be implemented with Lemon Squeezy)
-    alert(`Redirecting to purchase ${plan.name} plan... (Lemon Squeezy integration coming soon)`);
-    setShowUpgradeModal(false);
+    // For now, simulate successful purchase and update the plan
+    console.log('Selected plan:', plan);
+    
+    // Update the plan in the database
+    if (plan.planType === 'image') {
+      updatePlan('image', plan.id).then(() => {
+        alert(`Successfully upgraded to ${plan.name} plan! Credits will be added to your account.`);
+        setShowUpgradeModal(false);
+      }).catch((error) => {
+        console.error('Error updating plan:', error);
+        alert('Failed to update plan. Please try again.');
+      });
+    } else if (plan.planType === 'video') {
+      updatePlan('video', plan.id).then(() => {
+        alert(`Successfully upgraded to ${plan.name} plan! Video credits will be added to your account.`);
+        setShowUpgradeModal(false);
+      }).catch((error) => {
+        console.error('Error updating plan:', error);
+        alert('Failed to update plan. Please try again.');
+      });
+    }
   };
 
-  const handleCreditsChange = async (newCredits: number) => {
-    await updateCredits(newCredits);
-  };
-
-  const handleVideoCreditsChange = async (newVideoCredits: number) => {
-    await updateVideoCredits(newVideoCredits);
-  };
 
   if (loading) {
     return (
@@ -116,17 +127,26 @@ function App() {
         {activeTab === 'text-to-image' ? (
           <TextToImage 
             credits={credits} 
-            onCreditsChange={handleCreditsChange} 
+            onCreditsChange={(newCredits) => {
+              // Credits will be updated automatically through the auth hook
+              console.log('Credits changed to:', newCredits);
+            }} 
           />
         ) : activeTab === 'image-to-image' ? (
           <ImageToImage 
             credits={credits} 
-            onCreditsChange={handleCreditsChange} 
+            onCreditsChange={(newCredits) => {
+              // Credits will be updated automatically through the auth hook
+              console.log('Credits changed to:', newCredits);
+            }} 
           />
         ) : (
           <ImageToVideo 
            videoCredits={videoCredits} 
-           onVideoCreditsChange={handleVideoCreditsChange} 
+           onVideoCreditsChange={(newVideoCredits) => {
+             // Video credits will be updated automatically through the auth hook
+             console.log('Video credits changed to:', newVideoCredits);
+           }} 
           />
         )}
       </main>

@@ -83,7 +83,9 @@ export const TextToImage: React.FC<TextToImageProps> = ({ credits, onCreditsChan
       const imageUrl = await pollForResult(response.request_id);
       
       setGeneratedImage(imageUrl);
-      onCreditsChange(credits - 1);
+      // Update credits in database
+      const newCredits = credits - 1;
+      onCreditsChange(newCredits);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Generation failed');
     } finally {

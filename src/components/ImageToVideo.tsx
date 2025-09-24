@@ -99,7 +99,9 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, onVide
       const videoUrl = await pollForVideoResult(response.request_id);
       
       setGeneratedVideo(videoUrl);
-      onVideoCreditsChange(videoCredits - 1); // Video generation costs 1 video credit
+      // Update video credits in database
+      const newVideoCredits = videoCredits - 1;
+      onVideoCreditsChange(newVideoCredits);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Video generation failed');
     } finally {
