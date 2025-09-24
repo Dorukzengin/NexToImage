@@ -140,7 +140,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 flex items-center justify-center">
+              <div className="w-16 h-16 flex items-center justify-center">
                 <img 
                   src="/logo.png" 
                   alt="NexToImage Logo" 
@@ -422,7 +422,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 flex items-center justify-center">
+                <div className="w-12 h-12 flex items-center justify-center">
                   <img 
                     src="/logo.png" 
                     alt="NexToImage Logo" 
