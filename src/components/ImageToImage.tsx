@@ -9,10 +9,10 @@ import { downloadImage, fileToDataUrl, sleep } from '../utils';
 
 interface ImageToImageProps {
   credits: number;
-  onCreditsChange: (credits: number) => void;
+  updateCredits: (newCredits: number) => Promise<number | undefined>;
 }
 
-export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, onCreditsChange }) => {
+export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredits }) => {
   const [prompt, setPrompt] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -113,25 +113,8 @@ export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, onCreditsCh
       const imageUrl = await pollForResult(response.request_id);
       
       setGeneratedImage(imageUrl);
-      // Update credits in database
       const newCredits = credits - 1;
-      
-      // Update credits through database
-      try {
-        const { supabase } = await import('../lib/supabase');
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase
-            .from('user_profiles')
-            .update({ credits: newCredits })
-            .eq('id', user.id);
-        }
-        onCreditsChange(newCredits);
-      } catch (error) {
-        console.error('Error updating credits:', error);
-        // Still update local state
-        onCreditsChange(newCredits);
-      }
+      await updateCredits(newCredits);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Generation failed');
     } finally {

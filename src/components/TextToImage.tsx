@@ -9,10 +9,10 @@ import { downloadImage, sleep } from '../utils';
 
 interface TextToImageProps {
   credits: number;
-  onCreditsChange: (credits: number) => void;
+  updateCredits: (newCredits: number) => Promise<number | undefined>;
 }
 
-export const TextToImage: React.FC<TextToImageProps> = ({ credits, onCreditsChange }) => {
+export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits }) => {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -83,30 +83,8 @@ export const TextToImage: React.FC<TextToImageProps> = ({ credits, onCreditsChan
       const imageUrl = await pollForResult(response.request_id);
       
       setGeneratedImage(imageUrl);
-      // Update credits in database
       const newCredits = credits - 1;
-      
-      // Update credits through auth hook
-      try {
-        const { updateCredits } = await import('../hooks/useAuth');
-        // We need to access the updateCredits function from the auth context
-        // For now, we'll trigger a re-fetch by calling onCreditsChange
-        onCreditsChange(newCredits);
-        
-        // Also update in database directly
-        const { supabase } = await import('../lib/supabase');
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase
-            .from('user_profiles')
-            .update({ credits: newCredits })
-            .eq('id', user.id);
-        }
-      } catch (error) {
-        console.error('Error updating credits:', error);
-        // Still update local state
-        onCreditsChange(newCredits);
-      }
+      await updateCredits(newCredits);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Generation failed');
     } finally {

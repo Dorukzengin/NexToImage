@@ -12,7 +12,7 @@ import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { user, loading, credits, videoCredits, imagePlan, videoPlan, updatePlan } = useAuth();
+  const { user, loading, credits, videoCredits, imagePlan, videoPlan, updatePlan, updateCredits, updateVideoCredits } = useAuth();
   const [showLanding, setShowLanding] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -127,26 +127,17 @@ function App() {
         {activeTab === 'text-to-image' ? (
           <TextToImage 
             credits={credits} 
-            onCreditsChange={async (newCredits) => {
-              // Force refresh user profile to get updated credits
-              window.location.reload();
-            }} 
+            updateCredits={updateCredits}
           />
         ) : activeTab === 'image-to-image' ? (
           <ImageToImage 
             credits={credits} 
-            onCreditsChange={async (newCredits) => {
-              // Force refresh user profile to get updated credits
-              window.location.reload();
-            }} 
+            updateCredits={updateCredits}
           />
         ) : (
           <ImageToVideo 
            videoCredits={videoCredits} 
-           onVideoCreditsChange={async (newVideoCredits) => {
-             // Force refresh user profile to get updated credits
-             window.location.reload();
-           }} 
+           updateVideoCredits={updateVideoCredits}
           />
         )}
       </main>

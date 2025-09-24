@@ -7,10 +7,10 @@ import { fileToDataUrl, sleep } from '../utils';
 
 interface ImageToVideoProps {
   videoCredits: number;
-  onVideoCreditsChange: (credits: number) => void;
+  updateVideoCredits: (newVideoCredits: number) => Promise<number | undefined>;
 }
 
-export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, onVideoCreditsChange }) => {
+export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, updateVideoCredits }) => {
   const [prompt, setPrompt] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -99,25 +99,8 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, onVide
       const videoUrl = await pollForVideoResult(response.request_id);
       
       setGeneratedVideo(videoUrl);
-      // Update video credits in database
       const newVideoCredits = videoCredits - 1;
-      
-      // Update video credits through database
-      try {
-        const { supabase } = await import('../lib/supabase');
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          await supabase
-            .from('user_profiles')
-            .update({ video_credits: newVideoCredits })
-            .eq('id', user.id);
-        }
-        onVideoCreditsChange(newVideoCredits);
-      } catch (error) {
-        console.error('Error updating video credits:', error);
-        // Still update local state
-        onVideoCreditsChange(newVideoCredits);
-      }
+      await updateVideoCredits(newVideoCredits);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Video generation failed');
     } finally {

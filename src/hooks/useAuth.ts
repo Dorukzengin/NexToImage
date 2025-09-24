@@ -371,6 +371,8 @@ export const useAuth = () => {
     signIn,
     signInWithGoogle,
     signOut,
-    updatePlan
+    updatePlan,
+    updateCredits,
+    updateVideoCredits
   }
 }
