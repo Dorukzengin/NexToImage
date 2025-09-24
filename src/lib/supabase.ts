@@ -23,9 +23,7 @@ export const authService = {
           name,
           full_name: name,
         },
-        emailRedirectTo: window.location.origin,
-        // Disable email confirmation for easier testing
-        // In production, you should enable this
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       }
     })
     
