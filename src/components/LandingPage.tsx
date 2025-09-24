@@ -194,9 +194,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                   <span>Start Creating Now</span>
                   <ArrowRight className="w-5 h-5" />
                 </button>
-                <button className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold text-lg hover:border-gray-400 hover:bg-gray-50 transition-all duration-200">
-                  View Examples
-                </button>
               </div>
 
               <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-lg px-4 py-3">
