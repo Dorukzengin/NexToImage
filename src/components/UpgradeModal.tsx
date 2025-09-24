@@ -4,6 +4,8 @@ import { PricingPlan } from '../types';
 
 interface UpgradeModalProps {
   isOpen: boolean;
+  currentImagePlan: string;
+  currentVideoPlan: string;
   onClose: () => void;
   onSelectPlan: (plan: PricingPlan) => void;
 }
@@ -22,6 +24,7 @@ const pricingPlans: PricingPlan[] = [
       'Download in high quality',
     ],
     planType: 'image',
+    level: 1,
   },
   {
     id: 'pro',
@@ -37,6 +40,7 @@ const pricingPlans: PricingPlan[] = [
       'Priority processing',
     ],
     planType: 'image',
+    level: 2,
   },
   {
     id: 'premium',
@@ -53,10 +57,11 @@ const pricingPlans: PricingPlan[] = [
       'Best choice for heavy creators',
     ],
     planType: 'image',
+    level: 3,
   },
   {
-    id: 'video-master',
-    name: 'Video Master Pack',
+    id: 'video-starter',
+    name: 'Video Starter',
     price: 40,
     credits: 0,
     videoCredits: 5,
@@ -65,19 +70,40 @@ const pricingPlans: PricingPlan[] = [
       'Kling Video AI – Master quality',
       'Stunning visuals for professional use',
       'Download in high quality',
-      'Perfect add-on to any image plan',
+      'Perfect for beginners',
     ],
     planType: 'video',
+    level: 1,
   },
 ];
 
 export const UpgradeModal: React.FC<UpgradeModalProps> = ({
   isOpen,
+  currentImagePlan,
+  currentVideoPlan,
   onClose,
   onSelectPlan,
 }) => {
   if (!isOpen) return null;
 
+  const getActionText = (plan: PricingPlan) => {
+    if (plan.planType === 'image') {
+      if (currentImagePlan === 'free') return 'Upgrade to';
+      const currentPlan = pricingPlans.find(p => p.id === currentImagePlan && p.planType === 'image');
+      if (!currentPlan) return 'Choose';
+      if (plan.level > currentPlan.level) return 'Upgrade to';
+      if (plan.level < currentPlan.level) return 'Downgrade to';
+      return 'Current Plan';
+    } else {
+      if (currentVideoPlan === 'free') return 'Choose';
+      return currentVideoPlan === plan.id ? 'Current Plan' : 'Switch to';
+    }
+  };
+
+  const isCurrentPlan = (plan: PricingPlan) => {
+    return (plan.planType === 'image' && currentImagePlan === plan.id) ||
+           (plan.planType === 'video' && currentVideoPlan === plan.id);
+  };
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -140,13 +166,16 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
                 <button
                   onClick={() => onSelectPlan(plan)}
+                  disabled={isCurrentPlan(plan)}
                   className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 ${
-                    plan.id === 'premium'
+                    isCurrentPlan(plan)
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : plan.id === 'premium'
                       ? 'bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:from-purple-600 hover:to-pink-700'
                       : 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700'
                   }`}
                 >
-                  Choose {plan.name}
+                  {getActionText(plan)} {plan.name}
                 </button>
               </div>
             ))}
@@ -190,9 +219,10 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
                 <button
                   onClick={() => onSelectPlan(plan)}
+                  disabled={isCurrentPlan(plan)}
                   className="w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 bg-gradient-to-r from-green-500 to-teal-600 text-white hover:from-green-600 hover:to-teal-700"
                 >
-                  Choose {plan.name}
+                  {getActionText(plan)} {plan.name}
                 </button>
               </div>
               )
@@ -201,8 +231,8 @@ export const UpgradeModal: React.FC<UpgradeModalProps> = ({
 
           <div className="mt-8 p-4 bg-gray-50 rounded-lg">
             <p className="text-sm text-gray-600 text-center">
-              <span className="font-medium">Note:</span> This is a demo application. 
-              In a real implementation, payment processing would be handled securely through services like Stripe.
+              <span className="font-medium">Note:</span> Payment processing will be handled through Lemon Squeezy.
+              You can upgrade or downgrade your plans anytime.
             </p>
           </div>
         </div>

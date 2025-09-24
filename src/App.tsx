@@ -12,7 +12,7 @@ import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { user, loading, credits, videoCredits, updateCredits, updateVideoCredits } = useAuth();
+  const { user, loading, credits, videoCredits, imagePlan, videoPlan, updateCredits, updateVideoCredits, updatePlan } = useAuth();
   const [showLanding, setShowLanding] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -28,19 +28,9 @@ function App() {
   }, [user]);
 
   const handleSelectPlan = (plan: PricingPlan) => {
-    // In a real app, this would process payment
-    if (plan.planType === 'image') {
-      updateCredits(plan.credits);
-    } else if (plan.planType === 'video') {
-      updateVideoCredits(plan.videoCredits || 0);
-    }
+    // Redirect to purchase page (will be implemented with Lemon Squeezy)
+    alert(`Redirecting to purchase ${plan.name} plan... (Lemon Squeezy integration coming soon)`);
     setShowUpgradeModal(false);
-    
-    // Show success message (in a real app, you'd show a proper toast/notification)
-    const creditsMessage = plan.planType === 'video' 
-      ? `${plan.videoCredits} video credits` 
-      : `${plan.credits} image credits`;
-    alert(`Successfully upgraded to ${plan.name}! ${creditsMessage} added to your account.`);
   };
 
   const handleCreditsChange = async (newCredits: number) => {
@@ -94,10 +84,13 @@ function App() {
   if (showAccountPage) {
     return (
       <AccountPage
+        imagePlan={imagePlan}
+        videoPlan={videoPlan}
         onUpgradeClick={() => {
           setShowAccountPage(false);
           setShowUpgradeModal(true);
         }}
+        onPlanChange={updatePlan}
         onBackToApp={() => setShowAccountPage(false)}
       />
     );
@@ -140,6 +133,8 @@ function App() {
 
       <UpgradeModal
         isOpen={showUpgradeModal}
+        currentImagePlan={imagePlan}
+        currentVideoPlan={videoPlan}
         onClose={() => setShowUpgradeModal(false)}
         onSelectPlan={handleSelectPlan}
       />

@@ -7,6 +7,8 @@ export const useAuth = () => {
   const [loading, setLoading] = useState(true)
   const [credits, setCredits] = useState(0)
   const [videoCredits, setVideoCredits] = useState(0)
+  const [imagePlan, setImagePlan] = useState('free')
+  const [videoPlan, setVideoPlan] = useState('free')
 
   useEffect(() => {
     // Get initial session
@@ -116,6 +118,8 @@ export const useAuth = () => {
       })
       setCredits(profile.credits)
       setVideoCredits(profile.video_credits || 0)
+      setImagePlan(profile.image_plan || 'free')
+      setVideoPlan(profile.video_plan || 'free')
     } catch (error) {
       console.error('Error loading user profile:', error)
     }
@@ -148,6 +152,8 @@ export const useAuth = () => {
     setUser(null)
     setCredits(0)
     setVideoCredits(0)
+    setImagePlan('free')
+    setVideoPlan('free')
     setLoading(false)
     return { error }
   }
@@ -190,16 +196,44 @@ export const useAuth = () => {
     }
   }
 
+  const updatePlan = async (planType: 'image' | 'video', planId: string) => {
+    if (!user) return
+
+    try {
+      const { data, error } = await supabase.rpc('update_user_plan', {
+        user_id: user.id,
+        plan_type: planType,
+        plan_id: planId
+      })
+
+      if (error) throw error
+
+      if (planType === 'image') {
+        setImagePlan(planId)
+      } else {
+        setVideoPlan(planId)
+      }
+
+      return data
+    } catch (error) {
+      console.error('Error updating plan:', error)
+      throw error
+    }
+  }
+
   return {
     user,
     loading,
     credits,
     videoCredits,
+    imagePlan,
+    videoPlan,
     signUp,
     signIn,
     signInWithGoogle,
     signOut,
     updateCredits,
-    updateVideoCredits
+    updateVideoCredits,
+    updatePlan
   }
 }

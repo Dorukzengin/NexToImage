@@ -30,6 +30,7 @@ export interface PricingPlan {
   videoCredits?: number;
   features: string[];
   planType: 'image' | 'video' | 'combo';
+  level: number; // For upgrade/downgrade ordering
 }
 
 export type TabType = 'text-to-image' | 'image-to-image';
@@ -56,4 +57,9 @@ export interface UsageGuidelines {
   textToImage: string[];
   imageToImage: string[];
   general: string[];
+}
+
+export interface UserPlan {
+  imagePlan: string;
+  videoPlan: string;
 }

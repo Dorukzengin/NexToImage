@@ -3,19 +3,25 @@ import { User, Settings, LogOut, Zap, Crown } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 interface AccountPageProps {
+  imagePlan: string;
+  videoPlan: string;
   onUpgradeClick: () => void;
+  onPlanChange: (planType: 'image' | 'video', planId: string) => Promise<any>;
   onBackToApp: () => void;
 }
 
 export const AccountPage: React.FC<AccountPageProps> = ({
+  imagePlan,
+  videoPlan,
   onUpgradeClick,
+  onPlanChange,
   onBackToApp,
 }) => {
   const { user, credits, videoCredits, signOut } = useAuth();
   
   if (!user) return null;
 
-  const getPlanInfo = (plan: string) => {
+  const getImagePlanInfo = (plan: string) => {
     switch (plan) {
       case 'starter':
         return { name: 'Starter', color: 'text-blue-600', bgColor: 'bg-blue-100' };
@@ -28,7 +34,17 @@ export const AccountPage: React.FC<AccountPageProps> = ({
     }
   };
 
-  const planInfo = getPlanInfo('free'); // This will be updated when we have real plan data
+  const getVideoPlanInfo = (plan: string) => {
+    switch (plan) {
+      case 'video-starter':
+        return { name: 'Video Starter', color: 'text-green-600', bgColor: 'bg-green-100' };
+      default:
+        return { name: 'Free', color: 'text-gray-600', bgColor: 'bg-gray-100' };
+    }
+  };
+
+  const imagePlanInfo = getImagePlanInfo(imagePlan);
+  const videoPlanInfo = getVideoPlanInfo(videoPlan);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -66,11 +82,19 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 <h2 className="text-xl font-semibold text-gray-900 mb-1">{user.name}</h2>
                 <p className="text-gray-600 mb-4">{user.email}</p>
                 
-                <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full ${planInfo.bgColor}`}>
-                  <Crown className="w-4 h-4 text-purple-600" />
-                  <span className={`text-sm font-medium ${planInfo.color}`}>
-                    {planInfo.name} Plan
-                  </span>
+                <div className="space-y-2">
+                  <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full ${imagePlanInfo.bgColor}`}>
+                    <Crown className="w-4 h-4 text-purple-600" />
+                    <span className={`text-sm font-medium ${imagePlanInfo.color}`}>
+                      Image: {imagePlanInfo.name}
+                    </span>
+                  </div>
+                  <div className={`inline-flex items-center space-x-2 px-3 py-1 rounded-full ${videoPlanInfo.bgColor}`}>
+                    <Crown className="w-4 h-4 text-green-600" />
+                    <span className={`text-sm font-medium ${videoPlanInfo.color}`}>
+                      Video: {videoPlanInfo.name}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -115,6 +139,40 @@ export const AccountPage: React.FC<AccountPageProps> = ({
             {/* Account Info */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center space-x-2">
+                <Crown className="w-5 h-5 text-purple-500" />
+                <span>Current Plans</span>
+              </h3>
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                  <span className="text-gray-600">Image Plan</span>
+                  <div className="flex items-center space-x-3">
+                    <span className={`font-medium ${imagePlanInfo.color}`}>{imagePlanInfo.name}</span>
+                    <button
+                      onClick={onUpgradeClick}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                    >
+                      {imagePlan === 'free' ? 'Upgrade' : 'Change'}
+                    </button>
+                  </div>
+                </div>
+                <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                  <span className="text-gray-600">Video Plan</span>
+                  <div className="flex items-center space-x-3">
+                    <span className={`font-medium ${videoPlanInfo.color}`}>{videoPlanInfo.name}</span>
+                    <button
+                      onClick={onUpgradeClick}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                    >
+                      {videoPlan === 'free' ? 'Choose' : 'Change'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-6 flex items-center space-x-2">
                 <Settings className="w-5 h-5 text-gray-500" />
                 <span>Account Information</span>
               </h3>
@@ -126,7 +184,9 @@ export const AccountPage: React.FC<AccountPageProps> = ({
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
                   <span className="text-gray-600">Plan</span>
-                  <span className={`font-medium ${planInfo.color}`}>{planInfo.name}</span>
+                  <span className="text-gray-900 font-medium">
+                    {imagePlanInfo.name} + {videoPlanInfo.name}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center py-3 border-b border-gray-100">
                   <span className="text-gray-600">Member Since</span>
