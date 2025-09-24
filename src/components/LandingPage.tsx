@@ -139,11 +139,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
       <header className="bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
               <img 
                 src="/logo.png" 
                 alt="NexToImage Logo" 
-                className="h-16 w-auto object-contain"
+                className="h-12 w-auto object-contain"
               />
               <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 NexToImage
@@ -419,11 +419,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-3 mb-4">
+              <div className="flex items-center space-x-2 mb-4">
                 <img 
                   src="/logo.png" 
                   alt="NexToImage Logo" 
-                  className="h-12 w-auto object-contain"
+                  className="h-10 w-auto object-contain"
                 />
                 <h3 className="text-xl font-bold">NexToImage</h3>
               </div>
