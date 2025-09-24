@@ -10,9 +10,10 @@ import { downloadImage, fileToDataUrl, sleep } from '../utils';
 interface ImageToImageProps {
   credits: number;
   updateCredits: (newCredits: number) => Promise<number | undefined>;
+  userPlan?: string;
 }
 
-export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredits }) => {
+export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredits, userPlan = 'free' }) => {
   const [prompt, setPrompt] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -202,6 +203,7 @@ export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredi
           <ResolutionSelector
             selectedResolution={selectedResolution}
             onResolutionChange={setSelectedResolution}
+            userPlan={userPlan}
           />
 
           {error && (

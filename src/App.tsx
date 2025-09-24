@@ -128,11 +128,13 @@ function App() {
           <TextToImage 
             credits={credits} 
             updateCredits={updateCredits}
+            userPlan={imagePlan}
           />
         ) : activeTab === 'image-to-image' ? (
           <ImageToImage 
             credits={credits} 
             updateCredits={updateCredits}
+            userPlan={imagePlan}
           />
         ) : (
           <ImageToVideo 

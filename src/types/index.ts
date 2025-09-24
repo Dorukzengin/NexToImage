@@ -40,6 +40,7 @@ export type ResolutionOption = {
   label: string;
   width: number;
   height: number;
+  planRequired?: string;
 };
 
 export interface User {

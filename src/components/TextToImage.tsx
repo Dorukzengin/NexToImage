@@ -10,9 +10,10 @@ import { downloadImage, sleep } from '../utils';
 interface TextToImageProps {
   credits: number;
   updateCredits: (newCredits: number) => Promise<number | undefined>;
+  userPlan?: string;
 }
 
-export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits }) => {
+export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits, userPlan = 'free' }) => {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -126,6 +127,7 @@ export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits
           <ResolutionSelector
             selectedResolution={selectedResolution}
             onResolutionChange={setSelectedResolution}
+            userPlan={userPlan}
           />
 
           {error && (
