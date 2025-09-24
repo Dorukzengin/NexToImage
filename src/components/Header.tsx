@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({
             <img 
               src="/logo.png" 
               alt="NexToImage Logo" 
-              className="h-10 w-auto"
+              className="h-14 w-auto object-contain"
             />
             <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               NexToImage

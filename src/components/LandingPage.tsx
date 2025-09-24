@@ -143,7 +143,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               <img 
                 src="/logo.png" 
                 alt="NexToImage Logo" 
-                className="h-10 w-auto"
+                className="h-16 w-auto object-contain"
               />
               <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 NexToImage
@@ -423,7 +423,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
                 <img 
                   src="/logo.png" 
                   alt="NexToImage Logo" 
-                  className="h-8 w-auto"
+                  className="h-12 w-auto object-contain"
                 />
                 <h3 className="text-xl font-bold">NexToImage</h3>
               </div>
