@@ -127,7 +127,11 @@ function App() {
         onUpgradeClick={() => setShowUpgradeModal(true)}
         user={user}
         onAccountClick={() => setShowAccountPage(true)}
-        onContactClick={() => setShowContactPage(true)}
+        onContactClick={() => {
+          setShowContactPage(true);
+          setShowAccountPage(false);
+          setShowUpgradeModal(false);
+        }}
       />
       
       <TabNavigation 
