@@ -8,6 +8,7 @@ import { TextToImage } from './components/TextToImage';
 import { ImageToImage } from './components/ImageToImage';
 import { ImageToVideo } from './components/ImageToVideo';
 import { UpgradeModal } from './components/UpgradeModal';
+import { ContactPage } from './components/ContactPage';
 import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
 
@@ -19,6 +20,7 @@ function App() {
   const [showAccountPage, setShowAccountPage] = useState(false);
   const [activeTab, setActiveTab] = useState<TabType>('text-to-image');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
+  const [showContactPage, setShowContactPage] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -107,6 +109,15 @@ function App() {
     );
   }
 
+  // Contact page
+  if (showContactPage) {
+    return (
+      <ContactPage
+        onBackToApp={() => setShowContactPage(false)}
+      />
+    );
+  }
+
   // Main app
   return (
     <div className="min-h-screen bg-gray-50">
@@ -116,6 +127,7 @@ function App() {
         onUpgradeClick={() => setShowUpgradeModal(true)}
         user={user}
         onAccountClick={() => setShowAccountPage(true)}
+        onContactClick={() => setShowContactPage(true)}
       />
       
       <TabNavigation 

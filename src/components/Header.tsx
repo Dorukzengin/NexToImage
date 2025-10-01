@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, User, Settings, LogOut } from 'lucide-react';
+import { Zap, User, Settings, LogOut, MessageCircle } from 'lucide-react';
 import { AuthUser } from '../lib/supabase';
 import { useAuth } from '../hooks/useAuth';
 
@@ -9,6 +9,7 @@ interface HeaderProps {
   onUpgradeClick: () => void;
   user: AuthUser | null;
   onAccountClick: () => void;
+  onContactClick: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onUpgradeClick, 
   user,
   onAccountClick,
+  onContactClick,
 }) => {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
   const { signOut } = useAuth();
@@ -82,6 +84,16 @@ export const Header: React.FC<HeaderProps> = ({
                   >
                     <Settings className="w-4 h-4" />
                     <span>Account Settings</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      onContactClick();
+                      setShowUserMenu(false);
+                    }}
+                    className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2"
+                  >
+                    <MessageCircle className="w-4 h-4" />
+                    <span>Contact Us</span>
                   </button>
                   <button
                     onClick={() => {
