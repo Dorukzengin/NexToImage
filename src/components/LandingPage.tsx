@@ -468,12 +468,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                 </li>
                 <li><a href="#" className="hover:text-white transition-colors">About</a></li>
                 <li>
-                  <button 
-                    onClick={onPrivacyPolicyClick}
-                    className="hover:text-white transition-colors text-left"
+                  <a 
+                    href="/privacy-policy" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="hover:text-white transition-colors"
                   >
                     Privacy Policy
-                  </button>
+                  </a>
                 </li>
                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
               </ul>

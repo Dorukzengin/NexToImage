@@ -22,7 +22,6 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabType>('text-to-image');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
-  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -60,9 +59,6 @@ function App() {
     setShowContactModal(true);
   };
 
-  const handlePrivacyPolicyClick = () => {
-    setShowPrivacyPolicy(true);
-  };
 
   if (loading) {
     return (
@@ -86,7 +82,6 @@ function App() {
             setAuthMode('register');
           }}
           onContactClick={handleContactClick}
-          onPrivacyPolicyClick={handlePrivacyPolicyClick}
         />
         <AuthModal
           isOpen={showAuthModal}
@@ -107,11 +102,6 @@ function App() {
           isOpen={showContactModal}
           onClose={() => setShowContactModal(false)}
         />
-        {showPrivacyPolicy && (
-          <PrivacyPolicyPage
-            onBackToApp={() => setShowPrivacyPolicy(false)}
-          />
-        )}
       </>
     );
   }
@@ -134,23 +124,10 @@ function App() {
           isOpen={showContactModal}
           onClose={() => setShowContactModal(false)}
         />
-        {showPrivacyPolicy && (
-          <PrivacyPolicyPage
-            onBackToApp={() => setShowPrivacyPolicy(false)}
-          />
-        )}
       </>
     );
   }
 
-  // Privacy Policy page
-  if (showPrivacyPolicy) {
-    return (
-      <PrivacyPolicyPage
-        onBackToApp={() => setShowPrivacyPolicy(false)}
-      />
-    );
-  }
 
   // Main app
   return (
