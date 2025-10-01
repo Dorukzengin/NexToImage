@@ -470,8 +470,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                 <li>
                   <a 
                     href="/privacy-policy" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('/privacy-policy.html', '_blank', 'noopener,noreferrer');
+                    }}
                     className="hover:text-white transition-colors"
                   >
                     Privacy Policy
