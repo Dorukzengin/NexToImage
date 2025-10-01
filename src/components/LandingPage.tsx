@@ -3,9 +3,10 @@ import { Zap, Camera, Brush, Play, Check, ArrowRight, Star, Users, Shield, Clock
 
 interface LandingPageProps {
   onGetStarted: () => void;
+  onContactClick?: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContactClick }) => {
   const features = [
     {
       icon: Camera,
@@ -154,7 +155,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
               <a href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
               <a href="#how-it-works" className="text-gray-600 hover:text-gray-900 transition-colors">How It Works</a>
               <a href="#faq" className="text-gray-600 hover:text-gray-900 transition-colors">FAQ</a>
-              <a href="#contact" className="text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
+              <button 
+                onClick={onContactClick}
+                className="text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                Contact
+              </button>
             </nav>
             <button
               onClick={onGetStarted}
@@ -451,7 +457,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted }) => {
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
+                <li>
+                  <button 
+                    onClick={onContactClick}
+                    className="hover:text-white transition-colors text-left"
+                  >
+                    Contact
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-white transition-colors">About</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>

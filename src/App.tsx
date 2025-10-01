@@ -53,6 +53,10 @@ function App() {
     }
   };
 
+  const handleContactClick = () => {
+    console.log('Contact button clicked!'); // Debug log
+    setShowContactModal(true);
+  };
 
   if (loading) {
     return (
@@ -69,11 +73,14 @@ function App() {
   if (showLanding || !user) {
     return (
       <>
-        <LandingPage onGetStarted={() => {
-          setShowLanding(false);
-          setShowAuthModal(true);
-          setAuthMode('register');
-        }} />
+        <LandingPage 
+          onGetStarted={() => {
+            setShowLanding(false);
+            setShowAuthModal(true);
+            setAuthMode('register');
+          }}
+          onContactClick={handleContactClick}
+        />
         <AuthModal
           isOpen={showAuthModal}
           mode={authMode}
@@ -89,6 +96,10 @@ function App() {
             setShowLanding(false);
           }}
         />
+        <ContactModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+        />
       </>
     );
   }
@@ -96,20 +107,25 @@ function App() {
   // Account page
   if (showAccountPage) {
     return (
-      <AccountPage
-        imagePlan={imagePlan}
-        videoPlan={videoPlan}
-        onUpgradeClick={() => {
-          setShowAccountPage(false);
-          setShowUpgradeModal(true);
-        }}
-        onPlanChange={updatePlan}
-        onBackToApp={() => setShowAccountPage(false)}
-      />
+      <>
+        <AccountPage
+          imagePlan={imagePlan}
+          videoPlan={videoPlan}
+          onUpgradeClick={() => {
+            setShowAccountPage(false);
+            setShowUpgradeModal(true);
+          }}
+          onPlanChange={updatePlan}
+          onBackToApp={() => setShowAccountPage(false)}
+        />
+        <ContactModal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+        />
+      </>
     );
   }
 
-  // Contact page
   // Main app
   return (
     <div className="min-h-screen bg-gray-50">
@@ -119,7 +135,7 @@ function App() {
         onUpgradeClick={() => setShowUpgradeModal(true)}
         user={user}
         onAccountClick={() => setShowAccountPage(true)}
-        onContactClick={() => setShowContactModal(true)}
+        onContactClick={handleContactClick}
       />
       
       <TabNavigation 
