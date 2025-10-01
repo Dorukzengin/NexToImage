@@ -479,7 +479,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                     Privacy Policy
                   </a>
                 </li>
-                <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+                <li>
+                  <a 
+                    href="/terms-of-service" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('/terms-of-service.html', '_blank', 'noopener,noreferrer');
+                    }}
+                    className="hover:text-white transition-colors"
+                  >
+                    Terms of Service
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
