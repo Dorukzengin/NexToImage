@@ -4,9 +4,10 @@ import { Zap, Camera, Brush, Play, Check, ArrowRight, Star, Users, Shield, Clock
 interface LandingPageProps {
   onGetStarted: () => void;
   onContactClick?: () => void;
+  onPrivacyPolicyClick?: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContactClick }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContactClick, onPrivacyPolicyClick }) => {
   const features = [
     {
       icon: Camera,
@@ -466,7 +467,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                   </button>
                 </li>
                 <li><a href="#" className="hover:text-white transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
+                <li>
+                  <button 
+                    onClick={onPrivacyPolicyClick}
+                    className="hover:text-white transition-colors text-left"
+                  >
+                    Privacy Policy
+                  </button>
+                </li>
                 <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
               </ul>
             </div>

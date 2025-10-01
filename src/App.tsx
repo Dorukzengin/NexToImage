@@ -9,6 +9,7 @@ import { ImageToImage } from './components/ImageToImage';
 import { ImageToVideo } from './components/ImageToVideo';
 import { UpgradeModal } from './components/UpgradeModal';
 import { ContactModal } from './components/ContactModal';
+import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
 import { TabType, PricingPlan } from './types';
 import { useAuth } from './hooks/useAuth';
 
@@ -21,6 +22,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabType>('text-to-image');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showPrivacyPolicy, setShowPrivacyPolicy] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -58,6 +60,10 @@ function App() {
     setShowContactModal(true);
   };
 
+  const handlePrivacyPolicyClick = () => {
+    setShowPrivacyPolicy(true);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -80,6 +86,7 @@ function App() {
             setAuthMode('register');
           }}
           onContactClick={handleContactClick}
+          onPrivacyPolicyClick={handlePrivacyPolicyClick}
         />
         <AuthModal
           isOpen={showAuthModal}
@@ -100,6 +107,11 @@ function App() {
           isOpen={showContactModal}
           onClose={() => setShowContactModal(false)}
         />
+        {showPrivacyPolicy && (
+          <PrivacyPolicyPage
+            onBackToApp={() => setShowPrivacyPolicy(false)}
+          />
+        )}
       </>
     );
   }
@@ -122,7 +134,21 @@ function App() {
           isOpen={showContactModal}
           onClose={() => setShowContactModal(false)}
         />
+        {showPrivacyPolicy && (
+          <PrivacyPolicyPage
+            onBackToApp={() => setShowPrivacyPolicy(false)}
+          />
+        )}
       </>
+    );
+  }
+
+  // Privacy Policy page
+  if (showPrivacyPolicy) {
+    return (
+      <PrivacyPolicyPage
+        onBackToApp={() => setShowPrivacyPolicy(false)}
+      />
     );
   }
 
