@@ -1,5 +1,5 @@
 import React from 'react';
-import { Zap, Camera, Brush, Play, Check, ArrowRight, Star, Users, Shield, Clock } from 'lucide-react';
+import { Zap, Camera, Brush, Play, Check, ArrowRight, Star, Users, Shield, Clock, Menu, X } from 'lucide-react';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -8,6 +8,8 @@ interface LandingPageProps {
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContactClick, onPrivacyPolicyClick }) => {
+  const [showMobileMenu, setShowMobileMenu] = React.useState(false);
+
   const features = [
     {
       icon: Camera,
@@ -139,19 +141,21 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
     <div className="min-h-screen bg-white">
       {/* Header */}
       <header className="bg-white/95 backdrop-blur-sm border-b border-gray-100 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-12 xs:h-14 sm:h-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
             <div className="flex items-center space-x-2">
               <img 
                 src="/logo.png" 
                 alt="NexToImage Logo" 
-                className="h-8 xs:h-9 sm:h-10 md:h-12 w-auto object-contain"
+                className="h-8 sm:h-10 lg:h-12 w-auto object-contain"
               />
-              <h1 className="text-lg xs:text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 NexToImage
               </h1>
             </div>
-            <nav className="hidden lg:flex items-center space-x-4 xl:space-x-8">
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-6 xl:space-x-8">
               <a href="#features" className="text-sm xl:text-base text-gray-600 hover:text-gray-900 transition-colors">Features</a>
               <a href="#pricing" className="text-sm xl:text-base text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
               <a href="#how-it-works" className="text-sm xl:text-base text-gray-600 hover:text-gray-900 transition-colors">How It Works</a>
@@ -163,70 +167,108 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                 Contact
               </button>
             </nav>
+
+            {/* Desktop CTA Button */}
             <button
               onClick={onGetStarted}
-              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 xs:px-4 sm:px-6 py-1.5 xs:py-2 rounded-lg text-sm sm:text-base font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+              className="hidden sm:block bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 sm:px-6 py-2 rounded-lg text-sm sm:text-base font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
             >
               Get Started
             </button>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setShowMobileMenu(!showMobileMenu)}
+              className="sm:hidden w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+            >
+              {showMobileMenu ? (
+                <X className="w-4 h-4 text-white" />
+              ) : (
+                <Menu className="w-4 h-4 text-white" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          {showMobileMenu && (
+            <div className="sm:hidden border-t border-gray-200 py-3 bg-white">
+              <div className="space-y-2">
+                <a href="#features" className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg">Features</a>
+                <a href="#pricing" className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg">Pricing</a>
+                <a href="#how-it-works" className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg">How It Works</a>
+                <a href="#faq" className="block px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg">FAQ</a>
+                <button 
+                  onClick={onContactClick}
+                  className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
+                >
+                  Contact
+                </button>
+                <button
+                  onClick={onGetStarted}
+                  className="w-full mt-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 transition-all duration-200"
+                >
+                  Get Started
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="relative py-8 xs:py-12 sm:py-16 md:py-20 px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 overflow-hidden">
+      <section className="relative py-8 sm:py-12 lg:py-20 px-3 sm:px-4 lg:px-8 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50"></div>
         <div className="relative max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 xs:gap-8 sm:gap-10 md:gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="text-center lg:text-left">
-              <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-purple-100 rounded-full px-2 xs:px-3 sm:px-4 py-1 xs:py-1.5 sm:py-2 mb-4 xs:mb-5 sm:mb-6">
-                <Star className="w-3 xs:w-4 h-3 xs:h-4 text-purple-600 mr-1 xs:mr-2" />
-                <span className="text-xs xs:text-sm font-medium text-purple-700">AI-Powered Creativity Platform</span>
+              <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-purple-100 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 mb-4 sm:mb-6">
+                <Star className="w-3 sm:w-4 h-3 sm:h-4 text-purple-600 mr-1.5 sm:mr-2" />
+                <span className="text-xs sm:text-sm font-medium text-purple-700">AI-Powered Creativity Platform</span>
               </div>
               
-              <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 xs:mb-5 sm:mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-6 leading-tight">
                 Turn Your Ideas Into
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block mt-1 xs:mt-2">
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent block mt-1 sm:mt-2">
                   Stunning AI Images & Videos
                 </span>
               </h1>
               
-              <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 mb-6 xs:mb-7 sm:mb-8 leading-relaxed">
+              <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 mb-6 sm:mb-8 leading-relaxed max-w-2xl mx-auto lg:mx-0">
                 AI-powered creativity at your fingertips. Generate professional-quality images and videos 
                 from simple text descriptions or transform existing images with cutting-edge AI technology.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-3 xs:gap-4 mb-6 xs:mb-7 sm:mb-8">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-6 sm:mb-8 justify-center lg:justify-start">
                 <button
                   onClick={onGetStarted}
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 xs:px-6 sm:px-8 py-2.5 xs:py-3 sm:py-4 rounded-xl font-semibold text-sm xs:text-base sm:text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
+                  className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl font-semibold text-sm sm:text-base lg:text-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
                 >
                   <span>Start Creating Now</span>
-                  <ArrowRight className="w-4 xs:w-5 h-4 xs:h-5" />
+                  <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
                 </button>
               </div>
 
-              <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-lg px-3 xs:px-4 py-2 xs:py-3">
-                <div className="w-6 xs:w-8 h-6 xs:h-8 bg-green-500 rounded-full flex items-center justify-center mr-2 xs:mr-3">
-                  <span className="text-white font-bold text-xs xs:text-sm">🎁</span>
+              <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-lg px-3 sm:px-4 py-2 sm:py-3 max-w-full">
+                <div className="w-6 sm:w-8 h-6 sm:h-8 bg-green-500 rounded-full flex items-center justify-center mr-2 sm:mr-3 flex-shrink-0">
+                  <span className="text-white font-bold text-xs sm:text-sm">🎁</span>
                 </div>
-                <span className="text-green-800 font-medium text-xs xs:text-sm">
+                <span className="text-green-800 font-medium text-xs sm:text-sm">
                   Sign up and get 2 free image credits instantly!
                 </span>
               </div>
             </div>
 
-            <div className="relative">
-              <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl xs:rounded-2xl p-2 xs:p-3 sm:p-4 shadow-2xl">
-                <div className="bg-white rounded-lg xs:rounded-xl p-2 xs:p-3 sm:p-4 shadow-lg">
-                  <div className="flex items-center space-x-2 xs:space-x-3 mb-2 xs:mb-3">
-                    <div className="w-2 xs:w-3 h-2 xs:h-3 bg-red-400 rounded-full"></div>
-                    <div className="w-2 xs:w-3 h-2 xs:h-3 bg-yellow-400 rounded-full"></div>
-                    <div className="w-2 xs:w-3 h-2 xs:h-3 bg-green-400 rounded-full"></div>
+            <div className="relative mt-8 lg:mt-0">
+              <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-2xl">
+                <div className="bg-white rounded-lg sm:rounded-xl p-3 sm:p-4 shadow-lg">
+                  <div className="flex items-center space-x-2 sm:space-x-3 mb-2 sm:mb-3">
+                    <div className="w-2 sm:w-3 h-2 sm:h-3 bg-red-400 rounded-full"></div>
+                    <div className="w-2 sm:w-3 h-2 sm:h-3 bg-yellow-400 rounded-full"></div>
+                    <div className="w-2 sm:w-3 h-2 sm:h-3 bg-green-400 rounded-full"></div>
                   </div>
-                  <div className="bg-gray-50 rounded-lg p-2 xs:p-3 mb-2 xs:mb-3">
+                  <div className="bg-gray-50 rounded-lg p-2 sm:p-3 mb-2 sm:mb-3">
                     <p className="text-xs text-gray-600 mb-1">Prompt:</p>
-                    <p className="text-xs xs:text-sm text-gray-800 font-medium">"A serene mountain lake at sunset with purple sky"</p>
+                    <p className="text-xs sm:text-sm text-gray-800 font-medium">"A serene mountain lake at sunset with purple sky"</p>
                   </div>
                   <div className="rounded-lg overflow-hidden">
                     <img 
@@ -235,12 +277,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                       className="w-full h-auto rounded-lg shadow-sm"
                     />
                   </div>
-                  <div className="flex items-center justify-between mt-2 xs:mt-3 text-xs text-gray-500">
+                  <div className="flex items-center justify-between mt-2 sm:mt-3 text-xs text-gray-500">
                     <div className="flex items-center space-x-2">
-                      <div className="w-1.5 xs:w-2 h-1.5 xs:h-2 bg-green-500 rounded-full animate-pulse"></div>
+                      <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-green-500 rounded-full animate-pulse"></div>
                       <span>Generated in 3 seconds</span>
                     </div>
-                    <span className="hidden xs:inline">1024×1024 HD</span>
+                    <span className="hidden sm:inline">1024×1024 HD</span>
                   </div>
                 </div>
               </div>
@@ -250,27 +292,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-12 xs:py-16 sm:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-8 xs:mb-12 sm:mb-16">
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold text-gray-900 mb-3 xs:mb-4">
+      <section id="features" className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               Powerful AI Features
             </h2>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-2xl mx-auto">
               Unleash your creativity with our comprehensive suite of AI-powered tools
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 xs:gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div key={index} className="bg-white rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                  <div className={`w-12 xs:w-14 sm:w-16 h-12 xs:h-14 sm:h-16 ${feature.bgColor} rounded-xl xs:rounded-2xl flex items-center justify-center mb-4 xs:mb-5 sm:mb-6`}>
-                    <Icon className={`w-6 xs:w-7 sm:w-8 h-6 xs:h-7 sm:h-8 ${feature.color}`} />
+                <div key={index} className="bg-white rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                  <div className={`w-12 sm:w-14 lg:w-16 h-12 sm:h-14 lg:h-16 ${feature.bgColor} rounded-xl lg:rounded-2xl flex items-center justify-center mb-4 sm:mb-5 lg:mb-6`}>
+                    <Icon className={`w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 ${feature.color}`} />
                   </div>
-                  <h3 className="text-lg xs:text-xl font-semibold text-gray-900 mb-3 xs:mb-4">{feature.title}</h3>
-                  <p className="text-sm xs:text-base text-gray-600 leading-relaxed">{feature.description}</p>
+                  <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-2 sm:mb-3 lg:mb-4">{feature.title}</h3>
+                  <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{feature.description}</p>
                 </div>
               );
             })}
@@ -279,55 +321,55 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" className="py-12 xs:py-16 sm:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-8 xs:mb-12 sm:mb-16">
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold text-gray-900 mb-3 xs:mb-4">
+      <section id="pricing" className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               Choose Your Plan
             </h2>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
+            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600 max-w-2xl mx-auto">
               Flexible pricing for creators of all levels
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 xs:gap-6 sm:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
             {pricingPlans.map((plan, index) => (
               <div
                 key={index}
-                className={`relative bg-white rounded-xl xs:rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1 ${
+                className={`relative bg-white rounded-xl lg:rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl transform hover:-translate-y-1 ${
                   plan.popular ? 'border-purple-300 scale-105' : 'border-gray-200'
                 }`}
               >
                 {plan.popular && (
-                  <div className="absolute -top-3 xs:-top-4 left-1/2 transform -translate-x-1/2">
-                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 xs:px-4 py-1 xs:py-2 rounded-full text-xs xs:text-sm font-medium">
+                  <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm font-medium">
                       Most Popular
                     </div>
                   </div>
                 )}
                 
-                <div className="p-4 xs:p-6 sm:p-8">
-                  <h3 className="text-lg xs:text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                  <div className="mb-3 xs:mb-4">
-                    <span className="text-2xl xs:text-3xl sm:text-4xl font-bold text-gray-900">${plan.price}</span>
-                    <span className="text-sm xs:text-base text-gray-500">/month</span>
+                <div className="p-4 sm:p-6 lg:p-8">
+                  <h3 className="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                  <div className="mb-3 sm:mb-4">
+                    <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">${plan.price}</span>
+                    <span className="text-sm sm:text-base text-gray-500">/month</span>
                   </div>
-                  <p className="text-sm xs:text-base text-gray-600 mb-4 xs:mb-6">
+                  <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">
                     {plan.videoPackage ? `${plan.credits} video generations` : `${plan.credits} credits included`}
                   </p>
 
-                  <div className="space-y-2 xs:space-y-3 mb-6 xs:mb-8">
+                  <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
                     {plan.features.map((feature, featureIndex) => (
-                      <div key={featureIndex} className="flex items-center space-x-3">
-                        <Check className="w-4 xs:w-5 h-4 xs:h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-600 text-xs xs:text-sm">{feature}</span>
+                      <div key={featureIndex} className="flex items-start space-x-3">
+                        <Check className="w-4 sm:w-5 h-4 sm:h-5 text-green-500 flex-shrink-0 mt-0.5" />
+                        <span className="text-gray-600 text-xs sm:text-sm leading-relaxed">{feature}</span>
                       </div>
                     ))}
                   </div>
 
                   <button
                     onClick={onGetStarted}
-                    className={`w-full py-2 xs:py-3 px-4 xs:px-6 rounded-lg text-sm xs:text-base font-medium transition-all duration-200 transform hover:scale-105 bg-gradient-to-r ${plan.color} text-white hover:shadow-lg`}
+                    className={`w-full py-2 sm:py-3 px-4 sm:px-6 rounded-lg text-sm sm:text-base font-medium transition-all duration-200 transform hover:scale-105 bg-gradient-to-r ${plan.color} text-white hover:shadow-lg`}
                   >
                     Choose {plan.name}
                   </button>
@@ -339,38 +381,38 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
       </section>
 
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-12 xs:py-16 sm:py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-8 xs:mb-12 sm:mb-16">
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold text-gray-900 mb-3 xs:mb-4">
+      <section id="how-it-works" className="py-12 sm:py-16 lg:py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               How It Works
             </h2>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600">
+            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600">
               Create professional content in 3 simple steps
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 xs:gap-8 mb-8 xs:mb-10 sm:mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-8 sm:mb-10 lg:mb-12">
             {steps.map((step, index) => (
               <div key={index} className="text-center">
-                <div className="w-16 xs:w-18 sm:w-20 h-16 xs:h-18 sm:h-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full flex items-center justify-center text-xl xs:text-2xl sm:text-3xl font-bold mx-auto mb-4 xs:mb-5 sm:mb-6">
+                <div className="w-16 sm:w-18 lg:w-20 h-16 sm:h-18 lg:h-20 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full flex items-center justify-center text-xl sm:text-2xl lg:text-3xl font-bold mx-auto mb-4 sm:mb-5 lg:mb-6">
                   {step.number}
                 </div>
-                <div className="text-2xl xs:text-3xl sm:text-4xl mb-3 xs:mb-4">{step.icon}</div>
-                <h3 className="text-lg xs:text-xl font-semibold text-gray-900 mb-3 xs:mb-4">{step.title}</h3>
-                <p className="text-sm xs:text-base text-gray-600 leading-relaxed">{step.description}</p>
+                <div className="text-2xl sm:text-3xl lg:text-4xl mb-3 sm:mb-4">{step.icon}</div>
+                <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 mb-2 sm:mb-3 lg:mb-4">{step.title}</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
 
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl xs:rounded-2xl p-4 xs:p-6 sm:p-8 text-center">
-            <div className="flex items-center justify-center space-x-2 xs:space-x-3 mb-3 xs:mb-4">
-              <div className="w-10 xs:w-12 h-10 xs:h-12 bg-green-500 rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-lg xs:text-xl">🎁</span>
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl lg:rounded-2xl p-4 sm:p-6 lg:p-8 text-center">
+            <div className="flex items-center justify-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+              <div className="w-10 sm:w-12 h-10 sm:h-12 bg-green-500 rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-lg sm:text-xl">🎁</span>
               </div>
               <div>
-                <h3 className="text-base xs:text-lg font-semibold text-gray-900">Try Before You Subscribe!</h3>
-                <p className="text-sm xs:text-base text-gray-600">Every new account starts with 2 free credits</p>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Try Before You Subscribe!</h3>
+                <p className="text-sm sm:text-base text-gray-600">Every new account starts with 2 free credits</p>
               </div>
             </div>
           </div>
@@ -378,22 +420,22 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
       </section>
 
       {/* FAQ Section */}
-      <section id="faq" className="py-12 xs:py-16 sm:py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="text-center mb-8 xs:mb-12 sm:mb-16">
-            <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold text-gray-900 mb-3 xs:mb-4">
+      <section id="faq" className="py-12 sm:py-16 lg:py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-3 sm:mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-sm xs:text-base sm:text-lg md:text-xl text-gray-600">
+            <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-gray-600">
               Everything you need to know about NexToImage
             </p>
           </div>
 
-          <div className="space-y-4 xs:space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {faqs.map((faq, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-4 xs:p-6">
-                <h3 className="text-base xs:text-lg font-semibold text-gray-900 mb-2 xs:mb-3">{faq.question}</h3>
-                <p className="text-sm xs:text-base text-gray-600 leading-relaxed">{faq.answer}</p>
+              <div key={index} className="bg-gray-50 rounded-xl p-4 sm:p-6">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-2 sm:mb-3">{faq.question}</h3>
+                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{faq.answer}</p>
               </div>
             ))}
           </div>
@@ -401,72 +443,72 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
       </section>
 
       {/* CTA Section */}
-      <section className="py-12 xs:py-16 sm:py-20 bg-gradient-to-r from-blue-500 to-purple-600">
-        <div className="max-w-4xl mx-auto text-center px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl font-bold text-white mb-4 xs:mb-5 sm:mb-6">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-r from-blue-500 to-purple-600">
+        <div className="max-w-4xl mx-auto text-center px-3 sm:px-4 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4 sm:mb-5 lg:mb-6">
             Ready to Create Amazing Content?
           </h2>
-          <p className="text-sm xs:text-base sm:text-lg md:text-xl text-blue-100 mb-6 xs:mb-7 sm:mb-8">
+          <p className="text-sm sm:text-base lg:text-lg xl:text-xl text-blue-100 mb-6 sm:mb-7 lg:mb-8">
             Join thousands of creators and start generating stunning AI images and videos today.
           </p>
           <button
             onClick={onGetStarted}
-            className="bg-white text-blue-600 px-6 xs:px-8 sm:px-12 py-2.5 xs:py-3 sm:py-4 rounded-xl font-semibold text-sm xs:text-base sm:text-lg md:text-xl hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 inline-flex items-center space-x-2 xs:space-x-3"
+            className="bg-white text-blue-600 px-6 sm:px-8 lg:px-12 py-2.5 sm:py-3 lg:py-4 rounded-xl font-semibold text-sm sm:text-base lg:text-lg xl:text-xl hover:bg-gray-100 transition-all duration-200 transform hover:scale-105 inline-flex items-center space-x-2 sm:space-x-3"
           >
             <span>Start Creating Now</span>
-            <ArrowRight className="w-4 xs:w-5 sm:w-6 h-4 xs:h-5 sm:h-6" />
+            <ArrowRight className="w-4 sm:w-5 lg:w-6 h-4 sm:h-5 lg:h-6" />
           </button>
-          <p className="text-blue-100 mt-3 xs:mt-4 text-sm xs:text-base">
+          <p className="text-blue-100 mt-3 sm:mt-4 text-sm sm:text-base">
             No credit card required • 2 free credits included
           </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8 xs:py-10 sm:py-12">
-        <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 xs:gap-8">
+      <footer className="bg-gray-900 text-white py-8 sm:py-10 lg:py-12">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
             <div className="col-span-1 sm:col-span-2">
-              <div className="flex items-center space-x-2 mb-3 xs:mb-4">
+              <div className="flex items-center space-x-2 mb-3 sm:mb-4">
                 <img 
                   src="/logo.png" 
                   alt="NexToImage Logo" 
-                  className="h-8 xs:h-10 w-auto object-contain"
+                  className="h-8 sm:h-10 w-auto object-contain"
                 />
-                <h3 className="text-lg xs:text-xl font-bold">NexToImage</h3>
+                <h3 className="text-lg sm:text-xl font-bold">NexToImage</h3>
               </div>
-              <p className="text-sm xs:text-base text-gray-400 max-w-md mb-4 xs:mb-6">
+              <p className="text-sm sm:text-base text-gray-400 max-w-md mb-4 sm:mb-6">
                 Transform your ideas into stunning AI-generated images and videos. 
                 Professional quality results with cutting-edge AI technology.
               </p>
-              <div className="flex items-center space-x-3 xs:space-x-4 text-gray-400">
-                <Users className="w-4 xs:w-5 h-4 xs:h-5" />
-                <span className="text-sm xs:text-base">Trusted by 50,000+ creators</span>
+              <div className="flex items-center space-x-3 sm:space-x-4 text-gray-400">
+                <Users className="w-4 sm:w-5 h-4 sm:h-5" />
+                <span className="text-sm sm:text-base">Trusted by 50,000+ creators</span>
               </div>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-3 xs:mb-4 text-sm xs:text-base">Product</h4>
-              <ul className="space-y-1.5 xs:space-y-2 text-gray-400">
-                <li><a href="#features" className="text-sm xs:text-base hover:text-white transition-colors">Features</a></li>
-                <li><a href="#pricing" className="text-sm xs:text-base hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#how-it-works" className="text-sm xs:text-base hover:text-white transition-colors">How It Works</a></li>
-                <li><a href="#faq" className="text-sm xs:text-base hover:text-white transition-colors">FAQ</a></li>
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Product</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-gray-400">
+                <li><a href="#features" className="text-sm sm:text-base hover:text-white transition-colors">Features</a></li>
+                <li><a href="#pricing" className="text-sm sm:text-base hover:text-white transition-colors">Pricing</a></li>
+                <li><a href="#how-it-works" className="text-sm sm:text-base hover:text-white transition-colors">How It Works</a></li>
+                <li><a href="#faq" className="text-sm sm:text-base hover:text-white transition-colors">FAQ</a></li>
               </ul>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-3 xs:mb-4 text-sm xs:text-base">Support</h4>
-              <ul className="space-y-1.5 xs:space-y-2 text-gray-400">
+              <h4 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Support</h4>
+              <ul className="space-y-1.5 sm:space-y-2 text-gray-400">
                 <li>
                   <button 
                     onClick={onContactClick}
-                    className="text-sm xs:text-base hover:text-white transition-colors text-left"
+                    className="text-sm sm:text-base hover:text-white transition-colors text-left"
                   >
                     Contact
                   </button>
                 </li>
-                <li><a href="#" className="text-sm xs:text-base hover:text-white transition-colors">About</a></li>
+                <li><a href="#" className="text-sm sm:text-base hover:text-white transition-colors">About</a></li>
                 <li>
                   <a 
                     href="/privacy-policy" 
@@ -474,7 +516,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                       e.preventDefault();
                       window.open('/privacy-policy.html', '_blank', 'noopener,noreferrer');
                     }}
-                    className="text-sm xs:text-base hover:text-white transition-colors"
+                    className="text-sm sm:text-base hover:text-white transition-colors"
                   >
                     Privacy Policy
                   </a>
@@ -486,7 +528,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
                       e.preventDefault();
                       window.open('/terms-of-service.html', '_blank', 'noopener,noreferrer');
                     }}
-                    className="text-sm xs:text-base hover:text-white transition-colors"
+                    className="text-sm sm:text-base hover:text-white transition-colors"
                   >
                     Terms of Service
                   </a>
@@ -495,8 +537,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onContac
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-6 xs:mt-8 pt-6 xs:pt-8 text-center text-gray-400">
-            <p className="text-sm xs:text-base">&copy; 2025 NexToImage. All rights reserved.</p>
+          <div className="border-t border-gray-800 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-400">
+            <p className="text-sm sm:text-base">&copy; 2025 NexToImage. All rights reserved.</p>
           </div>
         </div>
       </footer>
