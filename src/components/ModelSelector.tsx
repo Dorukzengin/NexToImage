@@ -4,10 +4,9 @@ import { TabType } from '../types';
 
 interface ModelSelectorProps {
   onSelectModel: (model: TabType) => void;
-  onBack?: () => void;
 }
 
-export const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel, onBack }) => {
+export const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel }) => {
   const models = [
     {
       id: 'text-to-image' as TabType,
@@ -43,18 +42,8 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({ onSelectModel, onB
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          {onBack && (
-            <button
-              onClick={onBack}
-              className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-6 transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Dashboard</span>
-            </button>
-          )}
-          
           <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Choose Your AI Model
+            Welcome to NexToImage
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Select the perfect AI model for your creative needs

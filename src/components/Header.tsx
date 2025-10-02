@@ -146,11 +146,11 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Menu Dropdown */}
         {showMobileMenu && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
-            <div className="space-y-1">
+          <div className="lg:hidden border-t border-gray-200 py-3 bg-white">
+            <div className="space-y-2">
               <button
                 onClick={onUpgradeClick}
-                className="w-full text-left px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors"
+                className="block px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg font-medium"
               >
                 Upgrade Plan
               </button>
@@ -159,23 +159,21 @@ export const Header: React.FC<HeaderProps> = ({
                   onAccountClick();
                   setShowMobileMenu(false);
                 }}
-                className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
+                className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
               >
-                <Settings className="w-4 h-4" />
-                <span>Account Settings</span>
+                Account Settings
               </button>
               <button
                 onClick={() => {
                   onContactClick();
                   setShowMobileMenu(false);
                 }}
-                className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
+                className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>Contact Us</span>
+                Contact Us
               </button>
-              <div className="border-t border-gray-200 pt-3 mt-3">
-                <div className="px-4 py-2">
+              <div className="border-t border-gray-200 pt-2 mt-2">
+                <div className="px-3 py-2">
                   <p className="text-sm font-medium text-gray-900">{user?.name}</p>
                   <p className="text-xs text-gray-500">{user?.email}</p>
                 </div>
@@ -184,10 +182,9 @@ export const Header: React.FC<HeaderProps> = ({
                     signOut();
                     setShowMobileMenu(false);
                   }}
-                  className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
+                  className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg"
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
+                  Sign Out
                 </button>
               </div>
             </div>

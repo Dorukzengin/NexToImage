@@ -24,6 +24,7 @@ function App() {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showModelSelector, setShowModelSelector] = useState(true);
+  const [selectedModel, setSelectedModel] = useState<TabType | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -62,12 +63,12 @@ function App() {
   };
 
   const handleModelSelect = (model: TabType) => {
+    setSelectedModel(model);
     setActiveTab(model);
-    setShowModelSelector(false);
   };
 
   const handleLogoClick = () => {
-    setShowModelSelector(true);
+    setSelectedModel(null);
   };
 
 
@@ -153,7 +154,7 @@ function App() {
         onLogoClick={handleLogoClick}
       />
       
-      {!showModelSelector && (
+      {selectedModel && (
         <TabNavigation 
           activeTab={activeTab} 
           onTabChange={setActiveTab} 
@@ -161,32 +162,31 @@ function App() {
       )}
 
       <main className="py-8">
-        {showModelSelector ? (
+        {!selectedModel ? (
           <ModelSelector 
             onSelectModel={handleModelSelect}
-            onBack={() => setShowModelSelector(false)}
           />
         ) : (
           <>
-            {activeTab === 'text-to-image' ? (
+            {selectedModel === 'text-to-image' ? (
               <TextToImage 
                 credits={credits} 
                 updateCredits={updateCredits}
                 userPlan={imagePlan}
-                onBack={() => setShowModelSelector(true)}
+                onBack={() => setSelectedModel(null)}
               />
-            ) : activeTab === 'image-to-image' ? (
+            ) : selectedModel === 'image-to-image' ? (
               <ImageToImage 
                 credits={credits} 
                 updateCredits={updateCredits}
                 userPlan={imagePlan}
-                onBack={() => setShowModelSelector(true)}
+                onBack={() => setSelectedModel(null)}
               />
             ) : (
               <ImageToVideo 
                videoCredits={videoCredits} 
                updateVideoCredits={updateVideoCredits}
-               onBack={() => setShowModelSelector(true)}
+               onBack={() => setSelectedModel(null)}
               />
             )}
           </>
