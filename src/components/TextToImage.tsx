@@ -11,9 +11,10 @@ interface TextToImageProps {
   credits: number;
   updateCredits: (newCredits: number) => Promise<number | undefined>;
   userPlan?: string;
+  onBack?: () => void;
 }
 
-export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits, userPlan = 'free' }) => {
+export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits, userPlan = 'free', onBack }) => {
   const [prompt, setPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState<string | null>(null);
@@ -102,6 +103,16 @@ export const TextToImage: React.FC<TextToImageProps> = ({ credits, updateCredits
   return (
     <div className="max-w-4xl mx-auto p-3 xs:p-4 sm:p-6 space-y-6 xs:space-y-8">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 xs:p-5 sm:p-6">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Models</span>
+          </button>
+        )}
+        
         <h2 className="text-lg xs:text-xl font-semibold text-gray-800 mb-4 xs:mb-5 sm:mb-6 flex items-center space-x-2">
           <Wand2 className="w-4 xs:w-5 h-4 xs:h-5 text-blue-500" />
           <span>Text to Image Generation</span>

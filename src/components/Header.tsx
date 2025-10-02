@@ -10,6 +10,7 @@ interface HeaderProps {
   user: AuthUser | null;
   onAccountClick: () => void;
   onContactClick: () => void;
+  onLogoClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
@@ -19,6 +20,7 @@ export const Header: React.FC<HeaderProps> = ({
   user,
   onAccountClick,
   onContactClick,
+  onLogoClick,
 }) => {
   const [showUserMenu, setShowUserMenu] = React.useState(false);
   const [showMobileMenu, setShowMobileMenu] = React.useState(false);
@@ -29,16 +31,19 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
-          <div className="flex items-center space-x-2 flex-shrink-0">
+          <button 
+            onClick={onLogoClick}
+            className="flex items-center space-x-2 flex-shrink-0 hover:opacity-80 transition-opacity"
+          >
             <img 
               src="/logo.png" 
               alt="NexToImage Logo" 
               className="h-8 sm:h-10 w-auto object-contain"
             />
-            <h1 className="text-lg sm:text-xl lg:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent hidden xs:block">
+            <h1 className="text-base sm:text-lg lg:text-xl xl:text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               NexToImage
             </h1>
-          </div>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-4">
@@ -141,11 +146,11 @@ export const Header: React.FC<HeaderProps> = ({
 
         {/* Mobile Menu Dropdown */}
         {showMobileMenu && (
-          <div className="lg:hidden border-t border-gray-200 py-2 bg-white">
+          <div className="lg:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
             <div className="space-y-1">
               <button
                 onClick={onUpgradeClick}
-                className="w-full text-left px-3 py-2 text-sm font-medium text-blue-600 hover:bg-blue-50 rounded-lg"
+                className="w-full text-left px-4 py-3 text-sm font-medium text-blue-600 hover:bg-blue-50 transition-colors"
               >
                 Upgrade Plan
               </button>
@@ -154,7 +159,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onAccountClick();
                   setShowMobileMenu(false);
                 }}
-                className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center space-x-2"
+                className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
               >
                 <Settings className="w-4 h-4" />
                 <span>Account Settings</span>
@@ -164,13 +169,13 @@ export const Header: React.FC<HeaderProps> = ({
                   onContactClick();
                   setShowMobileMenu(false);
                 }}
-                className="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg flex items-center space-x-2"
+                className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors flex items-center space-x-2"
               >
                 <MessageCircle className="w-4 h-4" />
                 <span>Contact Us</span>
               </button>
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-2">
+              <div className="border-t border-gray-200 pt-3 mt-3">
+                <div className="px-4 py-2">
                   <p className="text-sm font-medium text-gray-900">{user?.name}</p>
                   <p className="text-xs text-gray-500">{user?.email}</p>
                 </div>
@@ -179,7 +184,7 @@ export const Header: React.FC<HeaderProps> = ({
                     signOut();
                     setShowMobileMenu(false);
                   }}
-                  className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg flex items-center space-x-2"
+                  className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center space-x-2"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Sign Out</span>

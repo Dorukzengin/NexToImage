@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Download, X, Video, Play } from 'lucide-react';
+import { Upload, Download, X, Video, Play, ArrowLeft } from 'lucide-react';
 import { FalApiService } from '../services/falApi';
 import { UsageGuidelines } from './UsageGuidelines';
 import { LoadingSpinner } from './LoadingSpinner';
@@ -8,9 +8,10 @@ import { fileToDataUrl, sleep } from '../utils';
 interface ImageToVideoProps {
   videoCredits: number;
   updateVideoCredits: (newVideoCredits: number) => Promise<number | undefined>;
+  onBack?: () => void;
 }
 
-export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, updateVideoCredits }) => {
+export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, updateVideoCredits, onBack }) => {
   const [prompt, setPrompt] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -129,6 +130,16 @@ export const ImageToVideo: React.FC<ImageToVideoProps> = ({ videoCredits, update
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Models</span>
+          </button>
+        )}
+        
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center space-x-2">
           <Video className="w-5 h-5 text-green-500" />
           <span>Image to Video Generation</span>

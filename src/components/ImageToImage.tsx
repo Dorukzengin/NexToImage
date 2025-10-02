@@ -139,6 +139,16 @@ export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredi
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-gray-800 mb-4 transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            <span>Back to Models</span>
+          </button>
+        )}
+        
         <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center space-x-2">
           <Image className="w-5 h-5 text-purple-500" />
           <span>Image to Image Generation</span>

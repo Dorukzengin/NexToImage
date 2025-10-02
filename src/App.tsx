@@ -7,6 +7,7 @@ import { TabNavigation } from './components/TabNavigation';
 import { TextToImage } from './components/TextToImage';
 import { ImageToImage } from './components/ImageToImage';
 import { ImageToVideo } from './components/ImageToVideo';
+import { ModelSelector } from './components/ModelSelector';
 import { UpgradeModal } from './components/UpgradeModal';
 import { ContactModal } from './components/ContactModal';
 import { PrivacyPolicyPage } from './components/PrivacyPolicyPage';
@@ -22,6 +23,7 @@ function App() {
   const [activeTab, setActiveTab] = useState<TabType>('text-to-image');
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
+  const [showModelSelector, setShowModelSelector] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -57,6 +59,15 @@ function App() {
   const handleContactClick = () => {
     console.log('Contact button clicked!'); // Debug log
     setShowContactModal(true);
+  };
+
+  const handleModelSelect = (model: TabType) => {
+    setActiveTab(model);
+    setShowModelSelector(false);
+  };
+
+  const handleLogoClick = () => {
+    setShowModelSelector(true);
   };
 
 
@@ -139,31 +150,46 @@ function App() {
         user={user}
         onAccountClick={() => setShowAccountPage(true)}
         onContactClick={handleContactClick}
+        onLogoClick={handleLogoClick}
       />
       
-      <TabNavigation 
-        activeTab={activeTab} 
-        onTabChange={setActiveTab} 
-      />
+      {!showModelSelector && (
+        <TabNavigation 
+          activeTab={activeTab} 
+          onTabChange={setActiveTab} 
+        />
+      )}
 
       <main className="py-8">
-        {activeTab === 'text-to-image' ? (
-          <TextToImage 
-            credits={credits} 
-            updateCredits={updateCredits}
-            userPlan={imagePlan}
-          />
-        ) : activeTab === 'image-to-image' ? (
-          <ImageToImage 
-            credits={credits} 
-            updateCredits={updateCredits}
-            userPlan={imagePlan}
+        {showModelSelector ? (
+          <ModelSelector 
+            onSelectModel={handleModelSelect}
+            onBack={() => setShowModelSelector(false)}
           />
         ) : (
-          <ImageToVideo 
-           videoCredits={videoCredits} 
-           updateVideoCredits={updateVideoCredits}
-          />
+          <>
+            {activeTab === 'text-to-image' ? (
+              <TextToImage 
+                credits={credits} 
+                updateCredits={updateCredits}
+                userPlan={imagePlan}
+                onBack={() => setShowModelSelector(true)}
+              />
+            ) : activeTab === 'image-to-image' ? (
+              <ImageToImage 
+                credits={credits} 
+                updateCredits={updateCredits}
+                userPlan={imagePlan}
+                onBack={() => setShowModelSelector(true)}
+              />
+            ) : (
+              <ImageToVideo 
+               videoCredits={videoCredits} 
+               updateVideoCredits={updateVideoCredits}
+               onBack={() => setShowModelSelector(true)}
+              />
+            )}
+          </>
         )}
       </main>
 
