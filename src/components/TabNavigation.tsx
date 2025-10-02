@@ -28,8 +28,8 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabCh
 
   return (
     <div className="border-b border-gray-200 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex space-x-8">
+      <div className="max-w-7xl mx-auto px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8">
+        <div className="flex space-x-4 xs:space-x-6 sm:space-x-8 overflow-x-auto">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -38,13 +38,13 @@ export const TabNavigation: React.FC<TabNavigationProps> = ({ activeTab, onTabCh
               <button
                 key={tab.id}
                 onClick={() => onTabChange(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm flex items-center space-x-2 transition-colors duration-200 ${
+                className={`py-3 xs:py-4 px-1 border-b-2 font-medium text-xs xs:text-sm flex items-center space-x-1.5 xs:space-x-2 transition-colors duration-200 whitespace-nowrap ${
                   isActive
                     ? 'border-blue-500 text-blue-600'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className="w-3.5 xs:w-4 h-3.5 xs:h-4" />
                 <span>{tab.label}</span>
               </button>
             );
