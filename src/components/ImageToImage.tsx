@@ -11,6 +11,7 @@ interface ImageToImageProps {
   credits: number;
   updateCredits: (newCredits: number) => Promise<number | undefined>;
   userPlan?: string;
+  onBack?: () => void;
 }
 
 export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredits, userPlan = 'free' }) => {
