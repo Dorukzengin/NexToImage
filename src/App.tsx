@@ -67,6 +67,11 @@ function App() {
     setActiveTab(model);
   };
 
+  const handleTabChange = (tab: TabType) => {
+    setActiveTab(tab);
+    setSelectedModel(tab);
+  };
+
   const handleLogoClick = () => {
     setSelectedModel(null);
   };
@@ -157,7 +162,7 @@ function App() {
       {selectedModel && (
         <TabNavigation 
           activeTab={activeTab} 
-          onTabChange={setActiveTab} 
+          onTabChange={handleTabChange} 
         />
       )}
 

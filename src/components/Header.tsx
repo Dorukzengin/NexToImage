@@ -117,7 +117,7 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           {/* Mobile Navigation */}
-          <div className="flex lg:hidden items-center space-x-2">
+          <div className="flex lg:hidden items-center space-x-2 relative">
             {/* Mobile Credits - Compact */}
             <div className="flex items-center space-x-1">
               <div className="flex items-center space-x-1 bg-blue-50 rounded-full px-2 py-1">
@@ -141,55 +141,59 @@ export const Header: React.FC<HeaderProps> = ({
                 <Menu className="w-4 h-4 text-white" />
               )}
             </button>
+
+            {/* Mobile Menu Dropdown */}
+            {showMobileMenu && (
+              <div className="absolute right-0 top-full mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                <div className="space-y-2">
+                  <button
+                    onClick={() => {
+                      onUpgradeClick();
+                      setShowMobileMenu(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg font-medium"
+                  >
+                    Upgrade Plan
+                  </button>
+                  <button
+                    onClick={() => {
+                      onAccountClick();
+                      setShowMobileMenu(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
+                  >
+                    Account Settings
+                  </button>
+                  <button
+                    onClick={() => {
+                      onContactClick();
+                      setShowMobileMenu(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
+                  >
+                    Contact Us
+                  </button>
+                  <div className="border-t border-gray-200 pt-2 mt-2 mx-2">
+                    <div className="px-2 py-2">
+                      <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                      <p className="text-xs text-gray-500">{user?.email}</p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setShowMobileMenu(false);
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Mobile Menu Dropdown */}
-        {showMobileMenu && (
-          <div className="lg:hidden border-t border-gray-200 py-3 bg-white">
-            <div className="space-y-2">
-              <button
-                onClick={onUpgradeClick}
-                className="block px-3 py-2 text-sm text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg font-medium"
-              >
-                Upgrade Plan
-              </button>
-              <button
-                onClick={() => {
-                  onAccountClick();
-                  setShowMobileMenu(false);
-                }}
-                className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
-              >
-                Account Settings
-              </button>
-              <button
-                onClick={() => {
-                  onContactClick();
-                  setShowMobileMenu(false);
-                }}
-                className="block w-full text-left px-3 py-2 text-sm text-gray-600 hover:text-gray-900 hover:bg-gray-50 rounded-lg"
-              >
-                Contact Us
-              </button>
-              <div className="border-t border-gray-200 pt-2 mt-2">
-                <div className="px-3 py-2">
-                  <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                  <p className="text-xs text-gray-500">{user?.email}</p>
-                </div>
-                <button
-                  onClick={() => {
-                    signOut();
-                    setShowMobileMenu(false);
-                  }}
-                  className="block w-full text-left px-3 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg"
-                >
-                  Sign Out
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </header>
   );
