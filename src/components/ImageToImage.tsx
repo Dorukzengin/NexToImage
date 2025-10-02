@@ -14,7 +14,7 @@ interface ImageToImageProps {
   onBack?: () => void;
 }
 
-export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredits, userPlan = 'free' }) => {
+export const ImageToImage: React.FC<ImageToImageProps> = ({ credits, updateCredits, userPlan = 'free', onBack }) => {
   const [prompt, setPrompt] = useState('');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
