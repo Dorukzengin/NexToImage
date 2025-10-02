@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Upload, Download, X, Image } from 'lucide-react';
+import { Upload, Download, X, Image, ArrowLeft } from 'lucide-react';
 import { FalApiService } from '../services/falApi';
 import { ResolutionOption } from '../types';
 import { ResolutionSelector } from './ResolutionSelector';

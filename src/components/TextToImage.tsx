@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Wand2, Download } from 'lucide-react';
+import { Wand2, Download, ArrowLeft } from 'lucide-react';
 import { FalApiService } from '../services/falApi';
 import { ResolutionOption } from '../types';
 import { ResolutionSelector } from './ResolutionSelector';
